@@ -4,6 +4,7 @@
     </head>
     <body>
         <h1>Item list</h1>
+        <a href='/home/create'>Add an item</a>
         <ul>
             <?php
                 foreach($data['items'] as $item)

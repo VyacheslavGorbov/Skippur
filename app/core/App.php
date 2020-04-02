@@ -24,6 +24,7 @@
             {
                 $this->method = $url[1];
                 unset($url[1]);
+                echo 'Hello';
             }
 
             $this->params = $url ? array_values($url) : [];
