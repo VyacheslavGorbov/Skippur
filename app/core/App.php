@@ -4,7 +4,7 @@
     {
         
         var $controller = 'HomeController';
-        var $method = 'index';
+        var $method = 'Login';
         var $params = [];
 
         public function __construct() 
