@@ -24,7 +24,7 @@
                 $site->business_domain = $business_domain;
             	$site->manager_id = $user_id;
             	$site->insert();
-                $this->view('site/calender');
+                header('location:/site/calender');
 
 
 			 }else{
@@ -70,7 +70,13 @@
 
             //Creating the HTML table
             $calender="<table class='table table-bordered'>";
-            $calender.="<center><h2>$monthName $year</h2></center>";
+            $calender.="<center><h2>$monthName $year</h2>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m',mktime(0,0,0,$month-1, 1, $year))."/".date('Y', mktime(0,0,0, $month-1, 1,$year))."'>Previous Month</a>";
+
+            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m')."/".date('Y')."'>Current Month</a>";
+
+            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m',mktime(0,0,0,$month+1, 1, $year))."/".date('Y', mktime(0,0,0, $month+1, 1,$year))."'>Next Month</a></center><br>";
+
 
             $calender.="<tr>";
 
@@ -103,15 +109,21 @@
                     $dayOfWeek = 0;
                     $calender.="</tr><tr>";
                 }
-                $currentDayRel = str_pad($month, 2, "0", STR_PAD_LEFT);
+                $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
                 $date = "$year-$month-$currentDayRel";
 
-                if($dateToday == $date){
-                    $calender.="<td  class='today'><h4>$currentDay</h4>";
+                $dayname = strtolower(date('l', strtotime($date)));
+                $eventNum = 0;
+
+                $today = $date == date('Y-m-d')? "today" : "";
+                if($date<date('Y-m-d')){
+                    $calender.="<td><h4>$currentDay</h4><button class='btn btn danger btn-xs'>N/A</button>";
+                }else{
+                    $calender.="<td class='$today'><h4>$currentDay</h4><a href='/site/set_Availability/$date' class='btn btn-success btn-xs'>Book</a>";
                 }
-                else{
-                    $calender.="<td><h4>$currentDay</h4>";
-                }
+
+
+
                 $calender.="</td>";
 
                 //Incrementing the counters
@@ -130,8 +142,20 @@
             $calender.="</tr>";
             $calender.="</tr>";
 
-            return $calender;
+            $this->view('site/calender', ['calender' => $calender]);
 
+        }
+
+        public function calender(){
+            $calender  = new SiteController();
+            $dateComponents = getdate();
+            $month = $dateComponents['mon'];
+            $year = $dateComponents['year'];
+            $calender->build_calender($month,$year);
+        }
+
+        public function set_Availability($date){
+            echo $date;
         }
 
 

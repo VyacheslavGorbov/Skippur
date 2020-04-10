@@ -9,7 +9,6 @@
 			td{
 				width:33%;
 			}
-
 			.today{
 				background:yellow;
 			}
@@ -20,14 +19,16 @@
 			<div class="row">
 				<div class="col-md-12">
 					<?php
-						$calender   = new SiteController();
-						$dateComponents = getdate();
-						$month = $dateComponents['mon'];
-						$year = $dateComponents['year'];
-					    echo $calender->build_calender($month, $year);
+						echo $data['calender'];
 					 ?>
+
 				</div>
 			</div>
+
 		</div>
+		<center>
+		<a class='btn btn-xs btn-primary' href='/Employee/add_employee'>ADD EMPLOYEE</a>
+		<a class='btn btn-xs btn-primary' href='/Employee/add_employee'>REMOVE EMPLOYEE</a>
+	</center>
 	</body>
 </html>

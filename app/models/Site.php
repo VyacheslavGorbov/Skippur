@@ -16,17 +16,19 @@ class Site extends Model
     	$sql = 'SELECT * FROM Sites';
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Sites');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
         return $stmt->fetchAll();
     }
 
-	function getCustomer($site_name){
-    	$sql = 'SELECT * FROM Sites WHERE site_name LIKE :site_name';
+	public function getSite($manager_id){
+    	$sql = 'SELECT * FROM Sites WHERE manager_id = :manager_id';
         $stmt = self::$_connection->prepare($sql);
-        $stmt->execute(['site_name'=>$site_name]);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Sites');
+        $stmt->execute(['manager_id'=>$manager_id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
         return $stmt->fetch();
     }
+
+
 
     function insert(){
     	$sql = 'INSERT INTO Sites(business_name, site_name, site_address, site_postal_code, site_phone_number, site_email, business_domain, manager_id) VALUES(:business_name, :site_name, :site_address, :site_postal_code, :site_phone_number, :site_email, :business_domain, :manager_id)';

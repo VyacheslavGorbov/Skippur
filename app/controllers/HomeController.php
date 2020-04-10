@@ -11,26 +11,43 @@
 
         public function login()
         {
+            $errorMessage = '';
+            $user = '';
             if(isset($_POST['action'])){
                 //login logic
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-                $user_type = $_POST['user_type'];
-                $user = $this->model('User')->getUser($username);
-                if($user!=null && $user_type == $user->user_type && password_verify($password, $user->password_hash)){
-                    session_start();
-                    $_SESSION['user_id'] = $user->user_id;
-                    //echo "You should be logged in!";
-                    //if user is a site :- header('location:/Home/Site')
-                    //if user is a customer :- header('location:/Home/Customer')
-                     //header('location:/Home/Secure');
+                if(isset($_POST['user_type'])){
+                    $user_type = $_POST['user_type'];
+                    $user = $this->model('User')->getUser($username);
+                    if($user!=null && $user_type == $user->user_type && password_verify($password, $user->password_hash)){
+                        session_start();
+                        $_SESSION['user_id'] = $user->user_id;
+                        if($user_type == 'Site')
+                            header('location:/Site/calender');
+                        //if user is a site :- 
+                        //if user is a customer :- header('location:/Home/Customer')
+                        //header('location:/Home/Secure');
+                    }
+                    elseif ($username == '' || $password == '') {
+                        $errorMessage = 'ENTER A VALID USERNAME AND PASSWORD';
+                        $this->view('home/login', ['errorMessage' => $errorMessage]);# code...
+                    }
+                    else{
+                        $errorMessage = 'INVALID USERNAME AND/OR PASSWORD ';
+                
+                         $this->view('home/login', ['errorMessage' => $errorMessage]);
+                }
                 }
                 else{
-                echo 'INVALID LOGIN';
-
+                    $errorMessage = 'ARE YOU A BUSINESS OWNER OR A CUSTOMER?';
+                    $this->view('home/login', ['errorMessage' => $errorMessage]);
                 }
+                
+                
+               
             }else{
-                $this->view('home/login');
+                $this->view('home/login', ['errorMessage'=> $errorMessage]);
             }
         }
 

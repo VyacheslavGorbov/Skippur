@@ -3,6 +3,10 @@
 </head>
 <body>
 	<div align="center">
+		<?php
+			echo $data['errorMessage'];
+		?>
+	</br>
 		Enter your login information below
 		<form action='' method="post">
 			<input type="radio" id="business" name="user_type" value="Site">
