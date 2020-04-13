@@ -5,7 +5,6 @@
         {
 
             if(isset($_POST['action'])){
-            	session_start();
             	$business_name = $_POST['business_name'];
             	$site_name = $_POST['site_name'];
             	$site_address = $_POST['site_address'];
@@ -156,6 +155,59 @@
 
         public function set_Availability($date){
             echo $date;
+        }
+
+        public function makeCard(){
+            $manager_id = $_SESSION['user_id'];
+            
+
+            $site = $this->model('Site')->getSite($manager_id);
+
+            $site_id = $site->site_id;
+            $status = 'active';
+            $site_employees = $this->model('Employee')->All($site_id, $status);
+
+            $cards = "<table>";
+            $cards .= "<tr>";
+            $card_counter = 0;
+            
+
+            foreach ($site_employees as $employee) {
+                $card_counter++;
+                # code...
+                $cards .= "<td>";
+
+                $employee_picture_id = $employee->picture_id;
+                $image = $this->model('Picture')->getPicture($employee_picture_id)->image;
+
+                if($image == '')
+                    $image = 'download.jpg';
+                $cards .= "<div class='cards'>";
+                $cards .= "<img src='../images/".$image."'  style='width:100%'>";
+                $cards .= "<h1>$employee->employee_first_name $employee->employee_last_name</h1>";
+                $cards .= "<p class='title'>$employee->employee_username</p>";
+                $cards .= "<p>$site->site_name</p>";
+                $cards .= "<p><a href=/employee/makeEmployeeInactive/$employee->employee_id><button> DELETE EMPLOYEE</button></a></p>";
+
+
+                $cards .= "</dv>";
+
+                if($card_counter == 4){
+                    $cards .= "</tr>";
+                    $cards .= "<tr>";
+                    $card_counter = 0;
+
+                }
+                
+                $cards .= "</td>";
+                
+            }
+
+            $cards .= "</tr>";
+
+
+            $this->view('site/siteEmployees', ['cards' => $cards]);
+
         }
 
 

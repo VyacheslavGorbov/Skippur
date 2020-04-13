@@ -21,17 +21,12 @@
                     $user_type = $_POST['user_type'];
                     $user = $this->model('User')->getUser($username);
                     if($user!=null && $user_type == $user->user_type && password_verify($password, $user->password_hash)){
-                        session_start();
                         $_SESSION['user_id'] = $user->user_id;
                         if($user_type == 'Site')
                             header('location:/Site/calender');
                         //if user is a site :- 
                         //if user is a customer :- header('location:/Home/Customer')
                         //header('location:/Home/Secure');
-                    }
-                    elseif ($username == '' || $password == '') {
-                        $errorMessage = 'ENTER A VALID USERNAME AND PASSWORD';
-                        $this->view('home/login', ['errorMessage' => $errorMessage]);# code...
                     }
                     else{
                         $errorMessage = 'INVALID USERNAME AND/OR PASSWORD ';
@@ -80,8 +75,7 @@
                     $user->insert();//
 
                     $user = $this->model('User')->getUser($username);
-                    session_start();
-                    
+
                     $_SESSION['user_id'] = $user->user_id;
                     //RedirectToAction
                     if($user_type == 'Customer')
@@ -106,6 +100,37 @@
            $user = $this->model('User');
            $user->name = $name;
            $this->view('home/indexJSON', ['name' => $user->name]);
+        }
+
+        public function employeeLogin(){
+            $errorMessage = '';
+            $sites = $this->model('Site')->getAllBusinessNames();
+            if(isset($_POST['action'])){
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+                if($_POST['Site'] != 'CHOOSE YOUR EMPLOYER'){
+                    $site_name = $_POST['Site'];
+                    $employee = $this->model('Employee')->getUser($username);
+                    $site_id = $this->model('Site')->getSiteId($site_name)->site_id;
+                    if($employee != null){
+                        if(password_verify($password, $employee->employee_password) && $employee->site_id == $site_id){
+                            $image= $this->model('Picture')->getPicture($employee->picture_id);
+                            $this->view('employee/employeeProfile', ['employee'=>$employee, 'image'=>$image]);
+                        }
+                    } 
+                    else{
+                        $errorMessage = 'ENTER A VALID USERNAME AND/OR PASSWORD COMBINATION';
+                        $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
+                    }
+                }
+                
+                else{
+                    $errorMessage =  'YOU HAVE NOT SELECTED AN EMPLOYER';
+                    $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
+                }
+            }
+            else
+                $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
         }
         
     }

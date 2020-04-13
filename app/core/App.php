@@ -11,6 +11,9 @@
         {
             $url = $this->parseUrl();
 
+            if(!isset($_SESSION['user_id']))
+                session_start();
+
             if(isset($url[0]) && file_exists('app/controllers/' . $url[0] . 'Controller.php'))
             {
                 $this->controller = $url[0] . 'Controller';

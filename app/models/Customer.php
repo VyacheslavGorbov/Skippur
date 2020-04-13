@@ -6,7 +6,7 @@ class Customer extends Model
     public $customer_email;
     public $user_id;
 
-    function All(){
+    public function All(){
     	//return all records
     	$sql = 'SELECT * FROM Customers';
         $stmt = self::$_connection->prepare($sql);

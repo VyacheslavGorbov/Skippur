@@ -5,7 +5,6 @@
         {
 
             if(isset($_POST['action'])){
-            	session_start();
             	$customer_name = $_POST['customer_name'];
             	$customer_email = $_POST['customer_email'];
             	$user_id = $_SESSION['user_id'];

@@ -15,20 +15,24 @@
 		</style>
 	</head>
 	<body>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<?php
-						echo $data['calender'];
-					 ?>
+		<div>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<?php
+							echo $data['calender'];
+						 ?>
 
+					</div>
 				</div>
-			</div>
 
+			</div>
 		</div>
+		<div>
 		<center>
-		<a class='btn btn-xs btn-primary' href='/Employee/add_employee'>ADD EMPLOYEE</a>
-		<a class='btn btn-xs btn-primary' href='/Employee/add_employee'>REMOVE EMPLOYEE</a>
+		<a class='btn btn-xs btn-primary' href='/site/makeCard'>VIEW EMPLOYEES</a>
+		
 	</center>
+	</div>
 	</body>
 </html>
