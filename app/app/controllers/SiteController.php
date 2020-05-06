@@ -1,6 +1,5 @@
 <?php
 	class SiteController extends Controller{
-        
 
 		public function register()
         {
@@ -22,34 +21,15 @@
                 $site->site_phone_number = $site_phone_number;
                 $site->site_email = $site_email;
                 $site->business_domain = $business_domain;
-                $site->manager_id = $user_id;
-
-                if ($site_address != null) {
-                    $latLon = $this->getLatLon($site_address);
-
-                    $site->site_latitude = $latLon[0];
-                    $site->site_longitude = $latLon[1];
-                }
-
+            	$site->manager_id = $user_id;
             	$site->insert();
+                header('location:/site/calender');
 
 
 			 }else{
                 $this->view('Site/Register');
             }
         }
-
-        public function getLatLon($address) {
-            $result = array();
-            $opts = array('http'=>array('header'=>"User-Agent: Skippur 0.2.2\r\n"));
-            $context = stream_context_create($opts);
-
-            $decodedJsonStr = json_decode(file_get_contents('https://nominatim.openstreetmap.org/search?q=' . preg_replace('/\s+/', '+', $address) . '&format=json', false, $context), true);
-            array_push($result, $decodedJsonStr[0]['lat'], $decodedJsonStr[0]['lon']);
-            return $result;
-        }
-
-        
 
         public function addEmployees(){
 
@@ -232,12 +212,7 @@
 
         }
 
-        public function homepage($site_id) {
-            $site = $this->model('Site')->getSiteById($site_id);
-            $this->view('site/homepage', $site);
-        }
-
-        
-
 
 	}
+
+?>

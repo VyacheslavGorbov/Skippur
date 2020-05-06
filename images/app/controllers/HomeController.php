@@ -24,8 +24,9 @@
                         $_SESSION['user_id'] = $user->user_id;
                         if($user_type == 'Site')
                             header('location:/Site/calender');
-                        else if ($user_type == 'Customer')
-                            header('location:/Customer/Index');
+                        //if user is a site :- 
+                        //if user is a customer :- header('location:/Home/Customer')
+                        //header('location:/Home/Secure');
                     }
                     else{
                         $errorMessage = 'INVALID USERNAME AND/OR PASSWORD ';
