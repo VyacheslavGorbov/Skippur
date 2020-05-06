@@ -20,7 +20,6 @@
                 $employee->employee_username = $employee_username;
                 $employee->status = $employee_status;
                 $employee->employee_password = password_hash($employee_password, PASSWORD_DEFAULT);
-                $picture_id;
                 
             	if(isset($_FILES['image'])){
                     $target = "images/".basename($_FILES["image"]["name"]);

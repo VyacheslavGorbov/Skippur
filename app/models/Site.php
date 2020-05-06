@@ -10,6 +10,8 @@ class Site extends Model
     public $site_email;
     public $business_domain;
     public $manager_id;
+    public $site_latitude;
+    public $site_longitude;
 
     function All(){
     	//return all records
@@ -45,14 +47,21 @@ class Site extends Model
         return $stmt->fetch();
     }
 
+    public function getSiteById($site_id) {
+        $sql = 'SELECT * FROM Sites WHERE site_id = :site_id';
+        $stmt = self::$_connection->prepare($sql);
+        $stmt->execute(['site_id'=>$site_id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
+        return $stmt->fetch();
+    }
+
 
 
     function insert(){
-    	$sql = 'INSERT INTO Sites(business_name, site_name, site_address, site_postal_code, site_phone_number, site_email, business_domain, manager_id) VALUES(:business_name, :site_name, :site_address, :site_postal_code, :site_phone_number, :site_email, :business_domain, :manager_id)';
+    	$sql = 'INSERT INTO Sites(business_name, site_name, site_address, site_postal_code, site_phone_number, site_email, business_domain, manager_id, site_latitude, site_longitude) VALUES(:business_name, :site_name, :site_address, :site_postal_code, :site_phone_number, :site_email, :business_domain, :manager_id, :site_latitude, :site_longitude)';
         $stmt = self::$_connection->prepare($sql);
-        $stmt->execute(['business_name'=>$this->business_name, 'site_name'=>$this->site_name, 'site_address'=>$this->site_address, 'site_postal_code'=>$this->site_postal_code, 'site_phone_number'=>$this->site_phone_number,'site_email'=>$this->site_email, 'business_domain'=>$this->business_domain, 'manager_id'=>$this->manager_id]);
+        $stmt->execute(['business_name'=>$this->business_name, 'site_name'=>$this->site_name, 'site_address'=>$this->site_address, 'site_postal_code'=>$this->site_postal_code, 'site_phone_number'=>$this->site_phone_number,'site_email'=>$this->site_email, 'business_domain'=>$this->business_domain, 'manager_id'=>$this->manager_id, 'site_latitude'=>$this->site_latitude, 'site_longitude'=>$this->site_longitude]);
         return self::$_connection->lastInsertId();
     }
 
 }
-?>

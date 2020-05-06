@@ -1,6 +1,14 @@
 <?php
 	class CustomerController extends Controller{
 
+		public function index()
+		{
+			$customer = $this->model('Customer');
+			$customers = $customer->All();
+			$sites = $this->model('Site')->All();
+			$this->view('customer/index', ['customer' => $customer, 'sites' => $sites]);
+		}
+
 		public function register()
         {
 
@@ -17,7 +25,19 @@
 			 }else{
                 $this->view('customer/register');
             }
-        }
+		}
+		
+		public function profile() {
+			$customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
+			$this->view('customer/profile', [$customer]);
+		}
+
+		public function viewHomepage($site_id) {
+			header('location:/site/homepage/' . $site_id);
+		}
+
+
+		
 
 	}
 

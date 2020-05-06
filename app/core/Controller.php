@@ -24,7 +24,7 @@
             }
             else
             {
-                echo 'ERROR: the view $name does not exist!';
+                echo "The view " . $name . " does not exist.";
             }
         }
     }

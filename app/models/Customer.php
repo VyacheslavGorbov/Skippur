@@ -30,5 +30,13 @@ class Customer extends Model
         return self::$_connection->lastInsertId();
     }
 
+    function getCustomerByUserId($user_id){
+    	$sql = 'SELECT * FROM Customers WHERE user_id = :user_id';
+        $stmt = self::$_connection->prepare($sql);
+        $stmt->execute(['user_id'=>$user_id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customers');
+        return $stmt->fetch();
+    }
+
 }
 ?>
