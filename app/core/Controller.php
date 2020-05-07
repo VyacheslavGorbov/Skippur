@@ -19,8 +19,9 @@
         {
             if(file_exists('app/views/' . $name . '.php'))
             {
-                include 'app/views/' . $name . '.php';
-                
+                //call the header here
+                include 'app/views/' . $name . '.php';// don't put the header or footer code here...
+                //call the footer here
             }
             else
             {
