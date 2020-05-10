@@ -141,8 +141,6 @@
                     $calender.="<td class='$today'><h4>$currentDay</h4><a href='/site/set_Availability/$date' class='btn btn-success btn-xs'>Book</a>";
                 }
 
-
-
                 $calender.="</td>";
 
                 //Incrementing the counters
@@ -170,9 +168,6 @@
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
             $site->build_calender($month,$year);
-
-            
-
         }
 
         public function set_Availability($date){
@@ -211,7 +206,6 @@
                 $cards .= "<p>$site->site_name</p>";
                 $cards .= "<p><a href=/employee/makeEmployeeInactive/$employee->employee_id><button> DELETE EMPLOYEE</button></a></p>";
 
-
                 $cards .= "</dv>";
 
                 if($card_counter == 4){
@@ -237,7 +231,117 @@
             $this->view('site/homepage', $site);
         }
 
+        public function set_booking(){
+
+        }
+
+
+        public function timeSlots(){
+            $site_id = 99;
+            $date = "2020-05-20";
+            $duration = 30;
+            $cleanup = 0;
+            $count = 0;
+            $Services = array('haircut','manicure and pedicure');
+            $serv = implode(',', $Services);
+            $site_availability = $this->model('Employee_Availabilities')->getSiteAvailability($site_id, $date);
+
+            $slots = array();
+            foreach ($site_availability as $emp_avail_today) {
+                echo $emp_avail_today->e_availability_date;
+                echo $emp_avail_today->employee_id;
+                # code...
+                $start = new DateTime($emp_avail_today->e_availability_start_time);
+                $end = new DateTime($emp_avail_today->e_availability_end_time);
+                $break_start = new DateTime($emp_avail_today->e_availability_break_start);
+                $break_end = new DateTime($emp_avail_today->e_availability_break_end);
+                $interval = new DateInterval("PT".$duration."M");
+                $bookingEmployee = new bookingEmp();
+                $bookingEmployee->id = $emp_avail_today->employee_id;
+                $bookingEmployee->listOfSlots = array();
+                $cleanupInterval = new DateInterval("PT".$cleanup."M");
+
+                
+                $tempStartEnd =  new DateTime($emp_avail_today->e_availability_start_time);
+                $temEnd = $tempStartEnd->add($interval);
+                
+                $employee_bookings = $this->model("Bookings")->getEmployeeBookings($emp_avail_today->employee_id, $date);
+
+                if($employee_bookings){
+
+                    $setPoint = $start;
+
+                    for($intStart = $start; $intStart < $end; $intStart->add($interval)->add($cleanupInterval)){
+
+                        foreach ($employee_booking as $booking) {
+                            $bookingStart = new DateTime($booking->start_time);
+                            $bookingEnd = new DateTime($booking->end_time);
+
+                            $endPoint = clone $intStart;
+                            $endPoint->add($interval);
+
+
+                            if ((($intStart < $bookingStart) && ($endPoint > $bookingStart)) || (($intStart > $bookingStart) && ($endPoint < $bookingEnd)) || (($bookingStart < $intStart) && ($intStart < $bookingEnd))){
+                                $intStart = $bookingEnd;
+                                $tempEnd = clone $intStart;
+                                $endPoint = $tempEnd->add($interval);
+                            }
+                        }
+
+                        if ((($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
+                            $intStart = $break_end;
+                            $tempEnd = clone $intStart;
+                            $endPoint = $tempEnd->add($interval);
+                        }
+
+                        if($endPoint < end){
+                            $slots[] = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
+                        }
+                        
+
+                        
+                    }
+                   
+                }
+                else{
+                    for($intStart = $start ; $temEnd < $end ; $intStart->add($interval)->add($cleanupInterval)){
+                        $endPoint = clone $intStart;
+                        $endPoint->add($interval);
+
+
+                        if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
+                            $intStart = $break_end;
+                            $tempEnd = clone $intStart;
+                            $endPoint = $tempEnd->add($interval);
+                        }
+
+                        if($endPoint <=  $end){
+                            $newSlot = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
+                            array_push($bookingEmployee->listOfSlots, $newSlot);
+                        }
+                        $temEnd = $endPoint;
+                    }
+
+                    array_push($slots, $bookingEmployee);
+                }
+
+            }
+            $this->view('site/bookingSlots', ['slots' => $slots, 'date'=>$date, 'services'=>$serv]);
+
+        }
+
+
+
+
+        
+
         
 
 
 	}
+
+    class bookingEmp{
+        public $employee_id;
+        public $listOfSlots;
+
+    }

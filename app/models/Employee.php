@@ -31,6 +31,8 @@ class Employee extends Model
         return $stmt->fetch();
     }
 
+    
+
     public function getUser($username){
         $sql = 'SELECT * FROM Employees WHERE employee_username LIKE :employee_username';
         $stmt = self::$_connection->prepare($sql);

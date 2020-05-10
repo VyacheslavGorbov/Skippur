@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2020 at 02:04 AM
+-- Generation Time: May 10, 2020 at 11:25 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `test`
 --
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `test`;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bookings`
+--
+
+DROP TABLE IF EXISTS `bookings`;
+CREATE TABLE `bookings` (
+  `booking_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `site_id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `booking_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `status` varchar(15) CHARACTER SET utf8 NOT NULL,
+  `message` varchar(255) CHARACTER SET utf8 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `bookings`:
+--
 
 -- --------------------------------------------------------
 
@@ -28,6 +53,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `customers`
 --
 
+DROP TABLE IF EXISTS `customers`;
 CREATE TABLE `customers` (
   `customer_id` int(11) NOT NULL,
   `customer_name` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -35,12 +61,19 @@ CREATE TABLE `customers` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- RELATIONSHIPS FOR TABLE `customers`:
+--   `user_id`
+--       `user` -> `user_id`
+--
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `employees`
 --
 
+DROP TABLE IF EXISTS `employees`;
 CREATE TABLE `employees` (
   `employee_id` int(11) NOT NULL,
   `employee_first_name` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -52,6 +85,14 @@ CREATE TABLE `employees` (
   `status` varchar(8) CHARACTER SET utf8 NOT NULL,
   `picture_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `employees`:
+--   `picture_id`
+--       `pictures` -> `picture_id`
+--   `site_id`
+--       `sites` -> `site_id`
+--
 
 --
 -- Dumping data for table `employees`
@@ -71,6 +112,7 @@ INSERT INTO `employees` (`employee_id`, `employee_first_name`, `employee_last_na
 -- Table structure for table `employee_availabilities`
 --
 
+DROP TABLE IF EXISTS `employee_availabilities`;
 CREATE TABLE `employee_availabilities` (
   `e_availability_id` int(11) NOT NULL,
   `employee_id` int(11) NOT NULL,
@@ -83,15 +125,23 @@ CREATE TABLE `employee_availabilities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- RELATIONSHIPS FOR TABLE `employee_availabilities`:
+--
+
+--
 -- Dumping data for table `employee_availabilities`
 --
 
 INSERT INTO `employee_availabilities` (`e_availability_id`, `employee_id`, `site_id`, `e_availability_start_time`, `e_availability_end_time`, `e_availability_break_start`, `e_availability_break_end`, `e_availability_date`) VALUES
-(1, 36, 99, '01:00:00', '04:00:00', '02:00:00', '03:00:00', '2020-05-06'),
-(2, 36, 99, '13:00:00', '04:00:00', '02:00:00', '03:00:00', '2020-05-06'),
-(3, 38, 99, '13:00:00', '16:00:00', '14:00:00', '15:00:00', '2020-05-07'),
-(4, 38, 99, '13:00:00', '16:00:00', '14:00:00', '15:00:00', '2020-05-06'),
-(5, 36, 99, '07:49:00', '17:48:00', '10:47:00', '12:47:00', '2020-05-07');
+(11, 36, 99, '06:00:00', '12:00:00', '07:00:00', '08:00:00', '2020-05-07'),
+(15, 36, 99, '06:00:00', '15:00:00', '07:00:00', '08:00:00', '2020-05-08'),
+(16, 36, 99, '08:00:00', '12:00:00', '09:00:00', '10:00:00', '2020-06-03'),
+(17, 36, 99, '07:00:00', '10:00:00', '08:00:00', '09:00:00', '2020-12-31'),
+(18, 36, 99, '07:00:00', '11:00:00', '08:00:00', '10:00:00', '2020-12-01'),
+(19, 36, 99, '06:00:00', '17:00:00', '10:00:00', '11:00:00', '2020-05-20'),
+(20, 38, 99, '06:00:00', '17:00:00', '10:00:00', '11:00:00', '2020-05-20'),
+(21, 40, 99, '09:00:00', '17:00:00', '13:00:00', '14:00:00', '1970-01-01'),
+(22, 40, 99, '09:00:00', '17:00:00', '13:00:00', '14:00:00', '2020-05-20');
 
 -- --------------------------------------------------------
 
@@ -99,10 +149,15 @@ INSERT INTO `employee_availabilities` (`e_availability_id`, `employee_id`, `site
 -- Table structure for table `pictures`
 --
 
+DROP TABLE IF EXISTS `pictures`;
 CREATE TABLE `pictures` (
   `picture_id` int(11) NOT NULL,
   `image` varchar(255) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `pictures`:
+--
 
 --
 -- Dumping data for table `pictures`
@@ -139,9 +194,26 @@ INSERT INTO `pictures` (`picture_id`, `image`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+CREATE TABLE `services` (
+  `service_id` int(11) NOT NULL,
+  `service_name` varchar(20) CHARACTER SET utf8 NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `services`:
+--
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sites`
 --
 
+DROP TABLE IF EXISTS `sites`;
 CREATE TABLE `sites` (
   `site_id` int(11) NOT NULL,
   `business_name` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -157,6 +229,12 @@ CREATE TABLE `sites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- RELATIONSHIPS FOR TABLE `sites`:
+--   `manager_id`
+--       `user` -> `user_id`
+--
+
+--
 -- Dumping data for table `sites`
 --
 
@@ -167,15 +245,39 @@ INSERT INTO `sites` (`site_id`, `business_name`, `site_name`, `site_address`, `s
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sites_services`
+--
+
+DROP TABLE IF EXISTS `sites_services`;
+CREATE TABLE `sites_services` (
+  `site_service_id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `site_id` int(11) NOT NULL,
+  `cost` int(11) NOT NULL,
+  `service_duration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `sites_services`:
+--
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `user`
 --
 
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password_hash` varchar(280) NOT NULL,
   `user_type` varchar(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- RELATIONSHIPS FOR TABLE `user`:
+--
 
 --
 -- Dumping data for table `user`
@@ -189,6 +291,12 @@ INSERT INTO `user` (`user_id`, `username`, `password_hash`, `user_type`) VALUES
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `bookings`
+--
+ALTER TABLE `bookings`
+  ADD PRIMARY KEY (`booking_id`);
 
 --
 -- Indexes for table `customers`
@@ -210,13 +318,20 @@ ALTER TABLE `employees`
 -- Indexes for table `employee_availabilities`
 --
 ALTER TABLE `employee_availabilities`
-  ADD PRIMARY KEY (`e_availability_id`);
+  ADD PRIMARY KEY (`e_availability_id`),
+  ADD UNIQUE KEY `employee_id` (`employee_id`,`e_availability_date`);
 
 --
 -- Indexes for table `pictures`
 --
 ALTER TABLE `pictures`
   ADD PRIMARY KEY (`picture_id`);
+
+--
+-- Indexes for table `services`
+--
+ALTER TABLE `services`
+  ADD PRIMARY KEY (`service_id`);
 
 --
 -- Indexes for table `sites`
@@ -229,6 +344,13 @@ ALTER TABLE `sites`
   ADD KEY `Sites_manager_id_FK` (`manager_id`);
 
 --
+-- Indexes for table `sites_services`
+--
+ALTER TABLE `sites_services`
+  ADD PRIMARY KEY (`site_service_id`),
+  ADD UNIQUE KEY `service_id` (`service_id`,`site_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -238,6 +360,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `bookings`
+--
+ALTER TABLE `bookings`
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `customers`
@@ -255,7 +383,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `employee_availabilities`
 --
 ALTER TABLE `employee_availabilities`
-  MODIFY `e_availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `e_availability_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `pictures`
@@ -264,10 +392,22 @@ ALTER TABLE `pictures`
   MODIFY `picture_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
+-- AUTO_INCREMENT for table `services`
+--
+ALTER TABLE `services`
+  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `sites`
 --
 ALTER TABLE `sites`
   MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+
+--
+-- AUTO_INCREMENT for table `sites_services`
+--
+ALTER TABLE `sites_services`
+  MODIFY `site_service_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`

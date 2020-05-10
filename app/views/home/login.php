@@ -5,7 +5,7 @@
 	
 	
 	<div align="center">
-		<a href=/Home/employeeLogin><button> CLICK HERE TO LOGIN AS EMPLOYEE</button></a>
+		<a href=/Home/employeeLogin><button> CLICK HERE TO LOGIN AS EMPLOYEE</button></a><br>
 		<?php
 			echo $data['errorMessage'];
 		?>

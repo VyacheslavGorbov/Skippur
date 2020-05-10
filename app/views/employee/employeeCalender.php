@@ -51,7 +51,7 @@
 				      <div class="modal-body">
 				        <div class="row">
 				        	<div class="col-md-12">
-				        		<form action="set_Availability" method="post">
+				        		<form action="/Employee/set_Availability" method="post">
 				        			<div class="form-group">
 				        				<label for="appt">Choose your availability start time:</label>
 										<input required type="time" id="appt" name="availability_start_time"
@@ -105,13 +105,13 @@
 		$(".setAvail").click(function(){
 			var dateS = $(this).attr('timeAvail');
 			$("#slot").html(dateS);
+
 			$("#today").val(dateS);
+			
 			$("#myModal").modal("show");
+			$(this).html("Edit Availability");
 
-			
-
-			
-		})
+})
 
 
 

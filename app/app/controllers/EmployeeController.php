@@ -195,23 +195,13 @@
             $availability->site_id = $site_id;
             $availability->e_availability_date = $availability_date;
 
-            $num = $availability->insert();
+            $result = $this->model('Employee_Availabilities')->getAvailability($employee_id, $availability_date);
+            echo $result->site_id;
 
-            echo $num;
+           // $num = $availability->insert();
 
-            echo $employee_id;
-            echo '/n';
-            echo $site_id;
-            echo '/n';
-            echo $availability_start_time;
-            echo '/n';
-            echo $availability_end_time;
-            echo '/n';
-            echo $availability_break_start;
-            echo '/n';
-            echo $availability_break_end;
-            echo '/n';
-            echo $availability_date;
+           // echo $num;
+
            
 
             
