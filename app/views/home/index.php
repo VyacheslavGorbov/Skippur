@@ -18,7 +18,7 @@
         </div>
         <div class='col-md-6'>
             <h2>Hello!</h2>
-            <button type='button' class='btn btn-primary'>Click me</button>
+            <button type='button' class='btn btn-primary' onclick="location.href = 'home/login';">Click me</button>
         </div>
     </div>
 

@@ -170,9 +170,6 @@
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
             $site->build_calender($month,$year);
-
-            
-
         }
 
         public function set_Availability($date){
@@ -230,11 +227,6 @@
 
             $this->view('site/siteEmployees', ['cards' => $cards]);
 
-        }
-
-        public function homepage($site_id) {
-            $site = $this->model('Site')->getSiteById($site_id);
-            $this->view('site/homepage', $site);
         }
 
         
