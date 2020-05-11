@@ -248,8 +248,7 @@
 
             $slots = array();
             foreach ($site_availability as $emp_avail_today) {
-                echo $emp_avail_today->e_availability_date;
-                echo $emp_avail_today->employee_id;
+               
                 # code...
                 $start = new DateTime($emp_avail_today->e_availability_start_time);
                 $end = new DateTime($emp_avail_today->e_availability_end_time);
@@ -273,7 +272,7 @@
 
                     for($intStart = $start; $intStart < $end; $intStart->add($interval)->add($cleanupInterval)){
 
-                        foreach ($employee_booking as $booking) {
+                        foreach ($employee_bookings as $booking) {
                             $bookingStart = new DateTime($booking->start_time);
                             $bookingEnd = new DateTime($booking->end_time);
 
@@ -281,27 +280,28 @@
                             $endPoint->add($interval);
 
 
-                            if ((($intStart < $bookingStart) && ($endPoint > $bookingStart)) || (($intStart > $bookingStart) && ($endPoint < $bookingEnd)) || (($bookingStart < $intStart) && ($intStart < $bookingEnd))){
+                            if (($intStart == $bookingStart) || (($intStart < $bookingStart) && ($endPoint > $bookingStart)) || (($intStart > $bookingStart) && ($endPoint < $bookingEnd)) || (($bookingStart < $intStart) && ($intStart < $bookingEnd))){
                                 $intStart = $bookingEnd;
                                 $tempEnd = clone $intStart;
                                 $endPoint = $tempEnd->add($interval);
                             }
                         }
 
-                        if ((($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
+                        if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
                             $intStart = $break_end;
                             $tempEnd = clone $intStart;
                             $endPoint = $tempEnd->add($interval);
                         }
 
-                        if($endPoint < end){
-                            $slots[] = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
+                        if($endPoint <= $end){
+                            $newSlot = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
+                            array_push($bookingEmployee->listOfSlots, $newSlot);
                         }
                         
-
+                        $temEnd = $endPoint;
                         
                     }
-                   
+                   array_push($slots, $bookingEmployee);
                 }
                 else{
                     for($intStart = $start ; $temEnd < $end ; $intStart->add($interval)->add($cleanupInterval)){
