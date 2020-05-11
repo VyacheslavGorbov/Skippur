@@ -78,7 +78,7 @@
                     $_SESSION['user_id'] = $user->user_id;
                     //RedirectToAction
                     if($user_type == 'Customer')
-                        header('location:/Customer/Register');
+                        header('location:/Home/Login');
                     elseif ($user_type == 'Site')
                         header('location:/Site/Register');
                         # code...
@@ -86,7 +86,7 @@
                     //header('location:/Home/Login');
                 }else{
                     //provide an error message
-
+                    echo 'Invalid Registration';
                 }
             }else{
                 $this->view('home/register');

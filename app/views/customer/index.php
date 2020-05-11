@@ -79,7 +79,7 @@
                 request.open('GET', requestUrl, false);
                 request.onload = function() {
                     const resp = JSON.parse(request.response);
-                    mymap.setView([resp[0].lat, resp[0].lon], 13);
+                    mymap.setView([resp[0].lat, resp[0].lon], 16);
                 }
                 request.send();
                 addMarkers();
@@ -93,7 +93,7 @@
                         "<br>" + site[1].site_address + 
                         "<br>" + site[1].site_postal_code + 
                         "<br>" + site[1].site_phone_number + 
-                        "<br>" + '<a href="/customer/viewHomepage/' + site[1].site_id + '">Visit Page</a>');
+                        "<br>" + '<a href="/customer/viewSite/' + site[1].site_id + '">Visit Page</a>');
                 });
             }
         </script>
