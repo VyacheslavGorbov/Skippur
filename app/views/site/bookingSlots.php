@@ -5,13 +5,31 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
 		<script>
 			/**p.four {
+=======
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<style>
+			.four{
+>>>>>>> d456613... spaced slots
   				border-style: dotted;
   				border-width: thick;
 			}*/
 
-		</script>
+			table.test td {
+    			
+    			margin: 12px 12px 12px 12px;
+    			padding: 12px 12px 12px 12px;
+			}
+			table.test {
+    			border-collapse: separate;
+    			border-spacing: 10px;
+    			*border-collapse: expression('separate', cellSpacing = '10px');
+    			table-layout:fixed;
+			}
+
+		</style>
 
 		<title></title>
 
@@ -22,30 +40,36 @@
 	</head>
 
 	<body>
-		<div class="container" >
-			<h1 class="text-center">Book for Date: <?php echo date('m/d/Y', strtotime($data["date"]));?></h1><hr>
+		<table class="test">
+			<tr><h1 class="text-center">Available slots for: <?php echo date('m/d/Y', strtotime($data["date"]));?></h1></tr>
 			<div class="row">
-				<div class=$p.four>
+				<div class='$.four'>
 				<?php
-
+					$counter = 0;
 					foreach($data["slots"] as $ts){
 						?>
+						<tr>
+						
 						<?php
 							
 						foreach ($ts->listOfSlots as $slots) {
 							# code...
 						
 						?>
-						<div class="col-md-2">
+						<div class="col-md-1">
 							<div class="form-group">
 								
-									<button class="btn btn-success book" slotInfo ="<?php echo $slots; ?>" employee_id ="$ts->employee_id"><?php echo $slots; ?></button>
+									<td><button class="btn btn-success book" slotInfo ="<?php echo $slots; ?>" employee_id ="$ts->employee_id"><?php $counter++; echo $slots; ?></button></td>
 								
 							</div>
 
 						</div>
+						<?php if ($counter == 5){ 
+									echo "</tr><tr>"; 
+									$counter = -1;
+									 }?>
 
-					<?php }?><br/> <p></p><div> <?php }?>
+					<?php }?></tr>  <br/> <p></p><?php }?>
 			</div>
 		</div>
 
@@ -69,7 +93,7 @@
 				      	<div class="row">
 				        	<div class="col-md-12">
 
-				        		<form action="/Employee/set_Availability" method="post">
+				        		<form action="/site/set_booking" method="post">
 				        			<div class="form-group">
 				        				<label for="appt">Confirm</label>
 										<p><input type="checkbox" required name="terms"> I accept the <u>Terms and Conditions</u></p>
