@@ -48,7 +48,13 @@ class CustomerController extends Controller{
 		}
 
 		public function build_calendar($site_id, $month, $year){
-        
+            if($month == 0) {
+                $month = 12;
+            }
+
+            if($month == 13) {
+                $month = 1;
+            }
             //Creating an array containing names of all days in a week.
             $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 

@@ -138,7 +138,7 @@
                 if($date<date('Y-m-d')){
                     $calender.="<td><h4>$currentDay</h4><button class='btn btn-danger btn-xs'>N/A</button>";
                 }else{
-                    $calender.="<td class='$today'><h4>$currentDay</h4><a href='/site/set_Availability/$date' class='btn btn-success btn-xs'>Book</a>";
+                    $calender.="<td class='$today'><h4>$currentDay</h4><a href='/site/displaySiteSchedule/$date' class='btn btn-success btn-xs'>SCHEDULE</a>";
                 }
 
                 $calender.="</td>";
@@ -328,6 +328,22 @@
             }
             $this->view('site/bookingSlots', ['slots' => $slots, 'date'=>$date, 'services'=>$serv]);
 
+        }
+
+
+        public function displaySiteSchedule($date){
+            $site_id = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
+            
+            //$date = "2020-05-20";  I need to get the date
+            $schedule = $this->model('Bookings')->getSiteSchedule($site_id, $date);
+            $this->view('site/site_schedule', ['schedule'=> $schedule]);
+        }
+
+        public function getEmployeeName($employee_id){
+             $firstName = $this->model('Employee')->getEmployee($employee_id)->employee_first_name;
+             $lastName = $this->model('Employee')->getEmployee($employee_id)->employee_last_name;
+
+             return $firstName . " " . $lastName;
         }
 
 

@@ -5,11 +5,10 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-		<script>
+		<style>
 			/**p.four {
-=======
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+========
+		
 		<style>
 			.four{
 >>>>>>> d456613... spaced slots
@@ -42,8 +41,8 @@
 	<body>
 		<table class="test">
 			<tr><h1 class="text-center">Available slots for: <?php echo date('m/d/Y', strtotime($data["date"]));?></h1></tr>
-			<div class="row">
-				<div class='$.four'>
+			
+				
 				<?php
 					$counter = 0;
 					foreach($data["slots"] as $ts){
@@ -70,8 +69,8 @@
 									 }?>
 
 					<?php }?></tr>  <br/> <p></p><?php }?>
-			</div>
-		</div>
+			
+		
 
 			<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">

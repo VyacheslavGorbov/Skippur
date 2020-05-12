@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 10, 2020 at 11:25 PM
+-- Generation Time: May 12, 2020 at 07:48 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -40,12 +40,25 @@ CREATE TABLE `bookings` (
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
   `status` varchar(15) CHARACTER SET utf8 NOT NULL,
-  `message` varchar(255) CHARACTER SET utf8 NOT NULL
+  `message` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `service` varchar(225) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- RELATIONSHIPS FOR TABLE `bookings`:
 --
+
+--
+-- Dumping data for table `bookings`
+--
+
+INSERT INTO `bookings` (`booking_id`, `customer_id`, `site_id`, `employee_id`, `booking_date`, `start_time`, `end_time`, `status`, `message`, `service`) VALUES
+(1, 1, 99, 36, '2020-05-20', '06:00:00', '07:00:00', 'unconfirmed', 'A haircut and a pedicure', 'haircut,pedicure'),
+(2, 3, 99, 36, '2020-05-20', '11:00:00', '12:00:00', 'unconfirmed', 'I just want it done', 'Pedicure, manicure'),
+(3, 5, 99, 36, '2020-05-20', '13:00:00', '13:30:00', 'unconfirmed', 'I want my nails painted green', 'manicure and pedicure'),
+(4, 4, 99, 36, '2020-05-20', '15:00:00', '16:00:00', 'unconfirmed', 'just a hair cut', 'haircut'),
+(5, 6, 99, 38, '2020-05-20', '07:00:00', '08:00:00', 'unconfirmed', 'i want a good massage', 'massage, manicure, pedicure'),
+(6, 1, 99, 40, '2020-05-20', '11:00:00', '12:00:00', 'unconfirmed', 'nice hair cut', 'haircut, shave');
 
 -- --------------------------------------------------------
 
@@ -66,6 +79,13 @@ CREATE TABLE `customers` (
 --   `user_id`
 --       `user` -> `user_id`
 --
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `customer_name`, `customer_email`, `user_id`) VALUES
+(3, 'rick', 'baby@yahoo.com', 50);
 
 -- --------------------------------------------------------
 
@@ -240,7 +260,8 @@ CREATE TABLE `sites` (
 
 INSERT INTO `sites` (`site_id`, `business_name`, `site_name`, `site_address`, `site_postal_code`, `site_phone_number`, `site_email`, `business_domain`, `manager_id`, `site_latitude`, `site_longitude`) VALUES
 (99, 'Stiger', 'Stiger Salon', '1023 Andrew Street', 'H4L 3N1', '3246534251', 'hgdgfhsdj@yahoo.com', 'spa', 47, '', ''),
-(101, 'DEMO', 'DEMO', 'demo street', 'demo', '1234567', 'demo@yahoo.com', 'auto_mechanic', 49, '', '');
+(101, 'DEMO', 'DEMO', 'demo street', 'demo', '1234567', 'demo@yahoo.com', 'auto_mechanic', 49, '', ''),
+(102, 'Unity Salon', 'Unity', '1390 Rue Decarie', 'H4L 3N1', '3564774433', 'dhgjhs@yahoo.com', 'hair_salon', 51, '45.5174666', '-73.687953');
 
 -- --------------------------------------------------------
 
@@ -286,7 +307,9 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`user_id`, `username`, `password_hash`, `user_type`) VALUES
 (47, 'stiger', '$2y$10$/72NINVI1AT2bYOwzPReA.49J52MqYPtKqWDo4xInxKP3CujebnDq', 'Site'),
 (48, 'mm', '$2y$10$9Wa5UW.z8O3DGOhE9UVd4.ex1ks.a4sRSGrDraNxA.PPqbS5Wkpeq', 'Site'),
-(49, 'demo', '$2y$10$x4fDU17o/Hrqlf2st1ks0uBSKvkApNX/ri7IDdN/QSE.3Tm0.9EAC', 'Site');
+(49, 'demo', '$2y$10$x4fDU17o/Hrqlf2st1ks0uBSKvkApNX/ri7IDdN/QSE.3Tm0.9EAC', 'Site'),
+(50, 'rick', '$2y$10$XD4y/P1Kb85TmfSCCZFdoeKvVxnpjxJYGH9sCVUUgAKvBShwKCv6.', 'Customer'),
+(51, 'unity', '$2y$10$OjO7o1KVEATv7LPDzKMTXO52dJzGIluvjszS/s3qP1sWrFsvFCauW', 'Site');
 
 --
 -- Indexes for dumped tables
@@ -365,13 +388,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -401,7 +424,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `sites`
 --
 ALTER TABLE `sites`
-  MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `sites_services`
@@ -413,7 +436,7 @@ ALTER TABLE `sites_services`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- Constraints for dumped tables
@@ -437,6 +460,59 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `sites`
   ADD CONSTRAINT `Sites_manager_id_FK` FOREIGN KEY (`manager_id`) REFERENCES `user` (`user_id`);
+
+
+--
+-- Metadata
+--
+USE `phpmyadmin`;
+
+--
+-- Metadata for table bookings
+--
+
+--
+-- Metadata for table customers
+--
+
+--
+-- Metadata for table employees
+--
+
+--
+-- Metadata for table employee_availabilities
+--
+
+--
+-- Dumping data for table `pma__table_uiprefs`
+--
+
+INSERT INTO `pma__table_uiprefs` (`username`, `db_name`, `table_name`, `prefs`, `last_update`) VALUES
+('root', 'test', 'employee_availabilities', '{\"sorted_col\":\"`e_availability_break_end` DESC\"}', '2020-05-10 16:44:48');
+
+--
+-- Metadata for table pictures
+--
+
+--
+-- Metadata for table services
+--
+
+--
+-- Metadata for table sites
+--
+
+--
+-- Metadata for table sites_services
+--
+
+--
+-- Metadata for table user
+--
+
+--
+-- Metadata for database test
+--
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -54,8 +54,16 @@
                           </ul>
                           <hr>
                           <div class="col-sm-5 col-xs-6 tital " >Date Of Joining: 15 Jun 2016</div>
-                          <p> <a href=/employee/calender><button> MY AVAILABILITY</button></a> </p>
-                      </div>
+                          <p>
+                            <div class="btn-toolbar">
+                              <a href=/employee/calender><button type="button" id="btnSubmit" class="btn btn-primary btn-sm">MY AVAILABILITY</button></a>
+                              <a href=/employee/displayBookings><button type="button" id="btnCancel" class="btn btn-primary btn-sm">MY SCHEDULE</button></a>
+                            </div> 
+                            </p>
+                      
+
+                      
+ 
 
                 </div>
             </div>

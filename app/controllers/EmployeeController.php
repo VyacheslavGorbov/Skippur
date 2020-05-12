@@ -124,7 +124,7 @@
 
                 $today = $date == date('Y-m-d')? "today" : "";
                 if($date<date('Y-m-d')){
-                    $calender.="<td><h4>$currentDay</h4><button class='btn btn danger btn-xs'>N/A</button>";
+                    $calender.="<td><h4>$currentDay</h4><button class='btn btn-danger btn-xs'>N/A</button>";
                 }else{
                    $calender.="<td class='$today'><h4>$currentDay</h4><button class='btn btn-success btn-xs setAvail' timeAvail=$date>Set Availability</button>";
                 }
@@ -153,21 +153,24 @@
         }
 
         public function calender(){
-            $calender  = new EmployeeController();
+           // $calender  = new EmployeeController();
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
-            $calender->build_calender($month,$year);
+            //$calender->build_calender($month,$year);
+            header('location:/employee/build_calender/' . $month .'/'. $year);
         }
 
         public function next($month, $year){
-            $calender  = new EmployeeController();
-            $calender->build_calender($month,$year);
+            header('location:/employee/build_calender/' . $month .'/'. $year);
+           // $calender  = new EmployeeController();
+           // $calender->build_calender($month,$year);
         }
 
         public function current($month, $year){
-            $calender  = new EmployeeController();
-            $calender->build_calender($month,$year);
+           // $calender  = new EmployeeController();
+           // $calender->build_calender($month,$year);
+            header('location:/employee/build_calender/' . $month .'/'. $year);
         }
 
         public function previous($month, $year){
@@ -208,6 +211,12 @@
 
             header('Location: ' . $_SERVER['HTTP_REFERER']);
   
+        }
+
+        public function displayEmployeeSchedule(){
+            $date = "2020-05-20";  //I need to get the date
+            $schedule = $this->model('Bookings')->getEmployeeSchedule($_SESSION['employee_id'], $date);
+            $this->view('employee/employeeSchedule', ['schedule'=> $schedule]);
         }
 
 	}
