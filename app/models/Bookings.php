@@ -1,6 +1,6 @@
 <?php
 	
-	class Bookings extends Model{
+	class Bookings extends Model {
 		
 		public $employee_id;
 	    public $site_id;
