@@ -57,7 +57,7 @@
                           <p>
                             <div class="btn-toolbar">
                               <a href=/employee/calender><button type="button" id="btnSubmit" class="btn btn-primary btn-sm">MY AVAILABILITY</button></a>
-                              <a href=/employee/displayBookings><button type="button" id="btnCancel" class="btn btn-primary btn-sm">MY SCHEDULE</button></a>
+                              <a href=/employee/displayEmployeeSchedule><button type="button" id="btnCancel" class="btn btn-primary btn-sm">MY SCHEDULE</button></a>
                             </div> 
                             </p>
                       

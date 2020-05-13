@@ -23,6 +23,7 @@
                 $site->site_email = $site_email;
                 $site->business_domain = $business_domain;
                 $site->manager_id = $user_id;
+                echo $business_domain;
 
                 if ($site_address != null) {
                     $latLon = $this->getLatLon($site_address);
@@ -35,7 +36,10 @@
 
 
 			 }else{
-                $this->view('Site/Register');
+
+                $industry_categories = $this->model('Service_Industries')->getIndustryCategories();
+
+                $this->view('Site/Register', ['industry_categories' => $industry_categories]);
             }
         }
 
@@ -159,7 +163,18 @@
             $calender.="</tr>";
             $calender.="</tr>";
 
-            $this->view('site/calender', ['calender' => $calender]);
+
+            
+
+           $site = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
+        
+           $business_domain = $this->model('Site')->getSite($_SESSION['user_id'])->business_domain;
+        
+           $industry_category = $this->model('Service_Industries')->getIndustryCategoryByName($business_domain)->industry_category_id;
+           
+
+           $services = $this->model('Services')->getServices($industry_category);
+           $this->view('site/calender', ['calender' => $calender, 'services' => $services]);
         }
 
         public function calender(){

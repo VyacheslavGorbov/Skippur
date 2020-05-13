@@ -30,7 +30,7 @@
 	        return $stmt->fetchAll();
     	}
 
-<<<<<<< HEAD
+
     	public function getSiteSchedule($site_id, $booking_date){
 	    	//return all booking for an employee on a particular day
 	    	$sql = 'SELECT * FROM Bookings WHERE site_id = :site_id AND booking_date >= :booking_date ORDER BY start_time, end_time';
@@ -40,8 +40,6 @@
 	        return $stmt->fetchAll();
     	}
 
-=======
->>>>>>> a3622673658bf2c709423a49a33e5f51fca3e48e
     	public function getSiteBookings($site_id, $booking_date){
 	        $sql = 'SELECT * FROM Bookings WHERE site_id = :site_id AND booking_date = :booking_date ORDER BY start_time = :start_time, end_time = :end_time';
 	        $stmt = self::$_connection->prepare($sql);

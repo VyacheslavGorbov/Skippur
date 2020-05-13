@@ -2,6 +2,7 @@
 
 class Site extends Model
 {
+    public $site_id;
     public $business_name;
     public $site_name;
     public $site_address;
