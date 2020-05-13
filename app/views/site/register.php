@@ -123,19 +123,10 @@
 			<label>Site Postal Code:</label><input type='text' name='site_postal_code' /><br />
 			<label>Site Phone Number:</label><input type='text' name='site_phone_number' /><br />
 			<label>Site Email:</label><input type='text' name='site_email' /><br />
-			<label for="business_domain">Business Domain:</label>
-
-			<select id="business_domain" name="business_domain">
-				<option value="hair_salon">Beauty Salon</option>
-				<option value="auto_mechanic">Auto Mechanic</option>
-				<option value="spa">Spa</option>
-				<option value="dentist">Dentist</option>
-				<option value="lawyer">Lawyer</option>
-			</select>
 			<input type="hidden" id="latitude_input" />
 			<input type="hidden" id="longitude_input" />
 			</br>
-			<input type="submit" name="action" value="Register">
+			<input type="submit" name="action" value="Register" class='btn btn-primary'>
 		</form>
 	</div>
 
