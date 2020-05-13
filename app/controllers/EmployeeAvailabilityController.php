@@ -1,4 +1,7 @@
 <?php
+/**
+    @accessFilter{LoginFilter}
+*/
 	class EmployeeAvailabilityController extends Controller{
 
 		public function setAvailability(){

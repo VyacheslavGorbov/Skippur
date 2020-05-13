@@ -1,5 +1,8 @@
 <?php
 
+/**
+    @accessFilter:{LoginFilter}
+*/
 class CustomerController extends Controller{
 
 		public function index()

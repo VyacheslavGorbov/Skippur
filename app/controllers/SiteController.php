@@ -1,5 +1,8 @@
 <?php
 
+/**
+    @accessFilter{LoginFilter}
+*/
 class SiteController extends Controller
 {
 
@@ -39,17 +42,6 @@ class SiteController extends Controller
         } else {
             $this->view('Site/Register');
         }
-    }
-
-    public function getLatLon($address)
-    {
-        $result = array();
-        $opts = array('http' => array('header' => "User-Agent: Skippur 0.2.2\r\n"));
-        $context = stream_context_create($opts);
-
-        $decodedJsonStr = json_decode(file_get_contents('https://nominatim.openstreetmap.org/search?q=' . preg_replace('/\s+/', '+', $address) . '&format=json', false, $context), true);
-        array_push($result, $decodedJsonStr[0]['lat'], $decodedJsonStr[0]['lon']);
-        return $result;
     }
 
 
