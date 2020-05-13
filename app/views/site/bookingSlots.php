@@ -8,6 +8,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 	<style>
+		p.four {}
+
 		.four {
 
 			border-style: dotted;
@@ -60,36 +62,6 @@
 		<div class="row">
 			<div class='$.four'>
 
-  				border-style: dotted;
-  				border-width: thick;
-			}*/
-
-			table.test td {
-    			
-    			margin: 12px 12px 12px 12px;
-    			padding: 12px 12px 12px 12px;
-			}
-			table.test {
-    			border-collapse: separate;
-    			border-spacing: 10px;
-    			*border-collapse: expression('separate', cellSpacing = '10px');
-    			table-layout:fixed;
-			}
-
-		</style>
-
-		<title></title>
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-		 integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-		 crossorigin="anonymous">
-		 <link rel="stylesheet" href="/css/main.css">
-	</head>
-
-	<body>
-		<table class="test">
-			<tr><h1 class="text-center">Available slots for: <?php echo date('m/d/Y', strtotime($data["date"]));?></h1></tr>
-			
 				<?php
 				$counter = 0;
 				foreach ($data["slots"] as $ts) {
