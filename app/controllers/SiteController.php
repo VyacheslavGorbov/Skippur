@@ -29,13 +29,6 @@ class SiteController extends Controller
             $site->business_domain = $business_domain;
             $site->manager_id = $user_id;
 
-            if ($site_address != null) {
-                $latLon = $this->getLatLon($site_address);
-
-                $site->site_latitude = $latLon[0];
-                $site->site_longitude = $latLon[1];
-            }
-
             $site->insert();
 
 
