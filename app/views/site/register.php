@@ -7,10 +7,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBTHojBKr7jB7xzzUXdcnFlJID3e0Wduno"></script>
-	</script>
-
 	<script>
-
 		var searchInput = 'search_input';
 
 		$(document).ready(function() {
@@ -26,15 +23,12 @@
 			});
 		});
 
-		$(document).on('change', '#'+searchInput, function() {
+		$(document).on('change', '#' + searchInput, function() {
 			document.getElementById('latitude_input').value = '';
 			document.getElementById('longitude_input').value = '';
-			
+
 		});
 	</script>
-</head>
-
-<body>
 	<style>
 		body,
 		html {
@@ -104,10 +98,25 @@
 			z-index: 1;
 		}
 	</style>
+</head>
+
+<body>
 
 	<div align="center">
 		Enter your registration information below
 		<form class="container" action='' method="post">
+			<select name='business_domain' class="dropdown">
+
+				<option selected="business_domain">Choose Business Category</option>
+				<?php
+
+				foreach ($data['industry_categories'] as $categories) {
+				?>
+					<option value="<?php echo $categories->industry_category_name; ?>"><?php echo $categories->industry_category_name; ?></option>
+				<?php
+				}
+				?>
+			</select></br>
 			<label>Business Name:</label><input type='text' name='business_name' /><br />
 			<label>Site Name:</label><input type='text' name='site_name' /><br />
 			<label>Site Address:</label><input type='text' id="search_input" name='site_address' /><br />
@@ -123,8 +132,8 @@
 				<option value="dentist">Dentist</option>
 				<option value="lawyer">Lawyer</option>
 			</select>
-			<input type="hidden" id="latitude_input"/>
-			<input type="hidden" id="longitude_input"/>
+			<input type="hidden" id="latitude_input" />
+			<input type="hidden" id="longitude_input" />
 			</br>
 			<input type="submit" name="action" value="Register">
 		</form>
