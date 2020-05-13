@@ -5,14 +5,8 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
 		<style>
 			/**p.four {
-========
-		
-		<style>
-			.four{
->>>>>>> d456613... spaced slots
 =======
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<style>
@@ -34,21 +28,6 @@
     			table-layout:fixed;
 			}
 
-<<<<<<< HEAD
-=======
-			table.test td {
-    			
-    			margin: 12px 12px 12px 12px;
-    			padding: 12px 12px 12px 12px;
-			}
-			table.test {
-    			border-collapse: separate;
-    			border-spacing: 10px;
-    			*border-collapse: expression('separate', cellSpacing = '10px');
-    			table-layout:fixed;
-			}
-
->>>>>>> a3622673658bf2c709423a49a33e5f51fca3e48e
 		</style>
 
 		<title></title>
@@ -62,13 +41,8 @@
 	<body>
 		<table class="test">
 			<tr><h1 class="text-center">Available slots for: <?php echo date('m/d/Y', strtotime($data["date"]));?></h1></tr>
-<<<<<<< HEAD
 			
 				
-=======
-			<div class="row">
-				<div class='$.four'>
->>>>>>> a3622673658bf2c709423a49a33e5f51fca3e48e
 				<?php
 					$counter = 0;
 					foreach($data["slots"] as $ts){
@@ -95,13 +69,8 @@
 									 }?>
 
 					<?php }?></tr>  <br/> <p></p><?php }?>
-<<<<<<< HEAD
 			
 		
-=======
-			</div>
-		</div>
->>>>>>> a3622673658bf2c709423a49a33e5f51fca3e48e
 
 			<!-- Modal -->
 		<div id="myModal" class="modal fade" role="dialog">
