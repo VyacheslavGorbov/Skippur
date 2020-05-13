@@ -1,41 +1,8 @@
 <?php
+
 /**
     @accessFilter{LoginFilter}
-*/
-	class SiteController extends Controller{
-        
-
-		public function register()
-        {
-
-            if(isset($_POST['action'])){
-            	$business_name = $_POST['business_name'];
-            	$site_name = $_POST['site_name'];
-            	$site_address = $_POST['site_address'];
-                $site_postal_code = $_POST['site_postal_code'];
-                $site_phone_number = $_POST['site_phone_number'];
-                $site_email = $_POST['site_email'];
-                $business_domain = $_POST['business_domain'];
-                $user_id = $_SESSION['user_id'];
-            	$site = $this->model('Site');
-                $site->business_name = $business_name;
-            	$site->site_name = $site_name;
-                $site->site_address = $site_address;
-                $site->site_postal_code = $site_postal_code;
-                $site->site_phone_number = $site_phone_number;
-                $site->site_email = $site_email;
-                $site->business_domain = $business_domain;
-                $site->manager_id = $user_id;
-                echo $business_domain;
-
-                if ($site_address != null) {
-                    $latLon = $this->getLatLon($site_address);
-
-                    $site->site_latitude = $latLon[0];
-                    $site->site_longitude = $latLon[1];
-                }
-
-
+ */
 class SiteController extends Controller
 {
 
@@ -61,39 +28,47 @@ class SiteController extends Controller
             $site->site_email = $site_email;
             $site->business_domain = $business_domain;
             $site->manager_id = $user_id;
+            echo $business_domain;
+
+            if ($site_address != null) {
+                $latLon = $this->getLatLon($site_address);
+
+                $site->site_latitude = $latLon[0];
+                $site->site_longitude = $latLon[1];
+            }
 
             $site->insert();
-
-
         } else {
-            $this->view('Site/Register');
+
+            $industry_categories = $this->model('Service_Industries')->getIndustryCategories();
+
+            $this->view('Site/Register', ['industry_categories' => $industry_categories]);
         }
     }
 
+    public function getLatLon($address)
+    {
+        $result = array();
+        $opts = array('http' => array('header' => "User-Agent: Skippur 0.2.2\r\n"));
+        $context = stream_context_create($opts);
 
-<<<<<<< HEAD
-			 }else{
+        $decodedJsonStr = json_decode(file_get_contents('https://nominatim.openstreetmap.org/search?q=' . preg_replace('/\s+/', '+', $address) . '&format=json', false, $context), true);
+        array_push($result, $decodedJsonStr[0]['lat'], $decodedJsonStr[0]['lon']);
+        return $result;
+    }
 
-                $industry_categories = $this->model('Service_Industries')->getIndustryCategories();
 
-                $this->view('Site/Register', ['industry_categories' => $industry_categories]);
-            }
-        }
-=======
+
     public function addEmployees()
     {
->>>>>>> vbranch
-
     }
 
     public function setAvailability()
     {
-
     }
 
     public function confirmAppointment()
     {
-
     }
 
     public function build_calender($month, $year)
@@ -193,12 +168,23 @@ class SiteController extends Controller
         $calender .= "</tr>";
         $calender .= "</tr>";
 
-        $this->view('site/calender', ['calender' => $calender]);
+
+
+
+        $site = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
+
+        $business_domain = $this->model('Site')->getSite($_SESSION['user_id'])->business_domain;
+
+        $industry_category = $this->model('Service_Industries')->getIndustryCategoryByName($business_domain)->industry_category_id;
+
+
+        $services = $this->model('Services')->getServices($industry_category);
+        $this->view('site/calender', ['calender' => $calender, 'services' => $services]);
     }
 
     public function calender()
     {
-        $site = new SiteController();
+        $site  = new SiteController();
         $dateComponents = getdate();
         $month = $dateComponents['mon'];
         $year = $dateComponents['year'];
@@ -221,25 +207,9 @@ class SiteController extends Controller
         $status = 'active';
         $site_employees = $this->model('Employee')->All($site_id, $status);
 
-<<<<<<< HEAD
-
-            
-
-           $site = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
-        
-           $business_domain = $this->model('Site')->getSite($_SESSION['user_id'])->business_domain;
-        
-           $industry_category = $this->model('Service_Industries')->getIndustryCategoryByName($business_domain)->industry_category_id;
-           
-
-           $services = $this->model('Services')->getServices($industry_category);
-           $this->view('site/calender', ['calender' => $calender, 'services' => $services]);
-        }
-=======
         $cards = "<table>";
         $cards .= "<tr>";
         $card_counter = 0;
->>>>>>> vbranch
 
 
         foreach ($site_employees as $employee) {
@@ -265,18 +235,15 @@ class SiteController extends Controller
                 $cards .= "</tr>";
                 $cards .= "<tr>";
                 $card_counter = 0;
-
             }
 
             $cards .= "</td>";
-
         }
 
         $cards .= "</tr>";
 
 
         $this->view('site/siteEmployees', ['cards' => $cards]);
-
     }
 
     public function homepage($site_id)
@@ -287,7 +254,6 @@ class SiteController extends Controller
 
     public function set_booking()
     {
-
     }
 
 
@@ -317,7 +283,7 @@ class SiteController extends Controller
             $cleanupInterval = new DateInterval("PT" . $cleanup . "M");
 
 
-            $tempStartEnd = new DateTime($emp_avail_today->e_availability_start_time);
+            $tempStartEnd =  new DateTime($emp_avail_today->e_availability_start_time);
             $temEnd = $tempStartEnd->add($interval);
 
             $employee_bookings = $this->model("Bookings")->getEmployeeBookings($emp_avail_today->employee_id, $date);
@@ -355,7 +321,6 @@ class SiteController extends Controller
                     }
 
                     $temEnd = $endPoint;
-
                 }
                 array_push($slots, $bookingEmployee);
             } else {
@@ -370,7 +335,7 @@ class SiteController extends Controller
                         $endPoint = $tempEnd->add($interval);
                     }
 
-                    if ($endPoint <= $end) {
+                    if ($endPoint <=  $end) {
                         $newSlot = $intStart->format("H:iA") . "-" . $endPoint->format("H:iA");
                         array_push($bookingEmployee->listOfSlots, $newSlot);
                     }
@@ -379,10 +344,8 @@ class SiteController extends Controller
 
                 array_push($slots, $bookingEmployee);
             }
-
         }
         $this->view('site/bookingSlots', ['slots' => $slots, 'date' => $date, 'services' => $serv]);
-
     }
 
 
@@ -402,13 +365,10 @@ class SiteController extends Controller
 
         return $firstName . " " . $lastName;
     }
-
-
 }
 
 class bookingEmp
 {
     public $employee_id;
     public $listOfSlots;
-
 }
