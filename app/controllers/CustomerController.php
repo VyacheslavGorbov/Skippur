@@ -1,7 +1,8 @@
 <?php
 
-use function PHPSTORM_META\type;
-
+/**
+    @accessFilter:{LoginFilter}
+*/
 class CustomerController extends Controller{
 
 		public function index()
@@ -31,7 +32,8 @@ class CustomerController extends Controller{
 		}
 		
 		public function profile() {
-			$customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
+            $customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
+            
 			$this->view('customer/profile', [$customer]);
 		}
 
@@ -160,14 +162,4 @@ class CustomerController extends Controller{
 		
 
 	}
-
-
-
-
-
-
-
-
-
-
 ?>

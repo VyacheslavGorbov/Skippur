@@ -30,7 +30,6 @@
 	        return $stmt->fetchAll();
     	}
 
-
     	public function getSiteSchedule($site_id, $booking_date){
 	    	//return all booking for an employee on a particular day
 	    	$sql = 'SELECT * FROM Bookings WHERE site_id = :site_id AND booking_date >= :booking_date ORDER BY start_time, end_time';

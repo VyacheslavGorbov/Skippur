@@ -1,4 +1,7 @@
 <?php
+    /**
+    @accessFilter{LoginFilter}
+*/
 	class EmployeeController extends Controller{
 
 		public function add_employee()
