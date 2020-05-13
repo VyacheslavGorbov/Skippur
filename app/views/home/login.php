@@ -68,7 +68,7 @@
 
 		Enter your login information below
 		<form action='' method="post" class='container'>
-			<input type="radio" id="business" name="user_type" value="Site">
+			<input type="radio" id="business" name="user_type" value="Site" checked>
 			<label for="business">Business</label>
 			<input type="radio" id="customer" name="user_type" value="Customer">
 			<label for="customer">Customer</label><br><br>
