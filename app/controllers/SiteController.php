@@ -30,13 +30,6 @@ class SiteController extends Controller
             $site->manager_id = $user_id;
             echo $business_domain;
 
-            if ($site_address != null) {
-                $latLon = $this->getLatLon($site_address);
-
-                $site->site_latitude = $latLon[0];
-                $site->site_longitude = $latLon[1];
-            }
-
             $site->insert();
         } else {
 
@@ -46,17 +39,7 @@ class SiteController extends Controller
         }
     }
 
-    public function getLatLon($address)
-    {
-        $result = array();
-        $opts = array('http' => array('header' => "User-Agent: Skippur 0.2.2\r\n"));
-        $context = stream_context_create($opts);
-
-        $decodedJsonStr = json_decode(file_get_contents('https://nominatim.openstreetmap.org/search?q=' . preg_replace('/\s+/', '+', $address) . '&format=json', false, $context), true);
-        array_push($result, $decodedJsonStr[0]['lat'], $decodedJsonStr[0]['lon']);
-        return $result;
-    }
-
+    
 
 
     public function addEmployees()
