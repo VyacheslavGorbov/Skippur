@@ -2,6 +2,7 @@
 
 class Customer extends Model
 {
+    public $customer_id;
     public $customer_name;
     public $customer_email;
     public $user_id;
@@ -11,7 +12,7 @@ class Customer extends Model
     	$sql = 'SELECT * FROM Customers';
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customers');
         return $stmt->fetchAll();
     }
 

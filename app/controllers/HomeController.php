@@ -78,7 +78,7 @@
                     $_SESSION['user_id'] = $user->user_id;
                     //RedirectToAction
                     if($user_type == 'Customer')
-                        header('location:/Home/Login');
+                        header('location:/Customer/Register');
                     elseif ($user_type == 'Site')
                         header('location:/Site/Register');
                         # code...

@@ -9,12 +9,13 @@
     <title>My Profile</title>
     <style>
         body {
-            background: rgb(80,117,160);
-            background: linear-gradient(167deg, rgba(80,117,160,1) 0%, rgba(104,255,200,1) 100%);
+            background: rgb(80, 117, 160);
+            background: linear-gradient(167deg, rgba(80, 117, 160, 1) 0%, rgba(104, 255, 200, 1) 100%);
             text-align: center;
         }
 
-        h2,h3 {
+        h2,
+        h3 {
             text-align: center;
             color: #092024;
         }
@@ -22,7 +23,6 @@
         nav {
             text-align: center;
         }
-
     </style>
     <script>
         function generateReferral() {
@@ -46,7 +46,7 @@
 
 <body>
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/home/index/">
+        <a class="navbar-brand" href="/customer/index/">
             <img src="/images/skippur_logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Skippur
         </a>
@@ -55,10 +55,18 @@
         <a href="/customer/appointments">My Appointments</a>
         <a href='/home/logout'>Logout</a>
     </nav>
-
-    <form action='' method='post' onsubmit="return false">
-        <input id='referral' type='text' name='name' readonly />
-        <button onclick="generateReferral()" type='submit' name='referralSubmission'>Generate Referral Code</button>
+    <?php echo $data['customer_id']->customer_id?>
+    <h2 class="text-center">My Referrals</h2>
+    <?php
+    if (isset($data['referrals'])) {
+        foreach ($data['referrals'] as $referral) {
+            var_dump($referral);
+        }
+    } ?>
+    <form action='/customer/createCode/' method='post'>
+        <input id='referral' type='hidden' name='referral_code' readonly />
+        <input name='customer_id' value=<?php echo $data['customer_id']?>
+        <button onclick="generateReferral()" type='submit' name='referralSubmission' class='btn btn-primary'>Generate Referral Code</button>
     </form>
 
 

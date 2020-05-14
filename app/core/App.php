@@ -60,6 +60,11 @@
             }
         }
 
+        /**
+         * TODO: Create Profile Filter
+         */
+
+
         private static function redirectFilters($class,$method) 
         {
             $reflection = new ReflectionClass($class);
@@ -110,4 +115,3 @@
 
         
     }
-?>

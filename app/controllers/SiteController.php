@@ -18,6 +18,8 @@ class SiteController extends Controller
             $site_phone_number = $_POST['site_phone_number'];
             $site_email = $_POST['site_email'];
             $business_domain = $_POST['business_domain'];
+            $latitude = $_POST['latitude'];
+            $longitude = $_POST['longitude'];
             $user_id = $_SESSION['user_id'];
             $site = $this->model('Site');
             $site->business_name = $business_name;
@@ -28,6 +30,8 @@ class SiteController extends Controller
             $site->site_email = $site_email;
             $site->business_domain = $business_domain;
             $site->manager_id = $user_id;
+            $site->site_latitude = $latitude;
+            $site->site_longitude = $longitude;
             echo $business_domain;
 
             $site->insert();
@@ -38,8 +42,6 @@ class SiteController extends Controller
             $this->view('Site/Register', ['industry_categories' => $industry_categories]);
         }
     }
-
-    
 
 
     public function addEmployees()

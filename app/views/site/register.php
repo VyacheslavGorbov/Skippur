@@ -105,7 +105,7 @@
 	<div align="center">
 		Enter your registration information below
 		<form class="container" action='' method="post">
-			<select name='business_domain' class="dropdown">
+			<select name='business_domain' class="dropdown" required>
 
 				<option selected="business_domain">Choose Business Category</option>
 				<?php
@@ -117,14 +117,14 @@
 				}
 				?>
 			</select></br>
-			<label>Business Name:</label><input type='text' name='business_name' /><br />
-			<label>Site Name:</label><input type='text' name='site_name' /><br />
-			<label>Site Address:</label><input type='text' id="search_input" name='site_address' /><br />
-			<label>Site Postal Code:</label><input type='text' name='site_postal_code' /><br />
-			<label>Site Phone Number:</label><input type='text' name='site_phone_number' /><br />
-			<label>Site Email:</label><input type='text' name='site_email' /><br />
-			<input type="hidden" id="latitude_input" />
-			<input type="hidden" id="longitude_input" />
+			<label>Business Name:</label><input type='text' name='business_name' required/><br />
+			<label>Site Name:</label><input type='text' name='site_name' required/><br />
+			<label>Site Address:</label><input type='text' id="search_input" name='site_address' required/><br />
+			<label>Site Postal Code:</label><input type='text' name='site_postal_code' required/><br />
+			<label>Site Phone Number:</label><input type='text' name='site_phone_number' required/><br />
+			<label>Site Email:</label><input type='text' name='site_email' required/><br/>
+			<input type="hidden" id="latitude_input" name='latitude' required/>
+			<input type="hidden" id="longitude_input" name='longitude' required/>
 			</br>
 			<input type="submit" name="action" value="Register" class='btn btn-primary'>
 		</form>

@@ -15,7 +15,7 @@ class Referrals extends Model
         return $stmt->fetchAll();
     }
 
-    public function create()
+    public function insert()
     {
         $SQL = 'INSERT INTO refferals(referral_code, customer_id) VALUES(:referral_code, :customer_id)';
         $stmt = self::$_connection->prepare($SQL);
@@ -28,6 +28,15 @@ class Referrals extends Model
         $SQL = 'SELECT * FROM referrals WHERE referral_code = :referral_code';
         $stmt = self::$_connection->prepare($SQL);
         $stmt->execute(['referral_code'=>$code]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'referrals');
+        return $stmt->fetch();
+    }
+
+    public function getReferralsById($id)
+    {
+        $SQL = 'SELECT * FROM referrals WHERE customer_id = :customer_id';
+        $stmt = self::$_connection->prepare($SQL);
+        $stmt->execute(['customer_id'=>$id]);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'referrals');
         return $stmt->fetch();
     }
