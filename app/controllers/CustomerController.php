@@ -32,28 +32,28 @@ class CustomerController extends Controller
 
     public function profile()
     {
-        $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
-        echo var_dump($customer_id);
-        $referrals = $this->model('referrals')->getReferralsById($_SESSION["user_id"]);
+        $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id'])->customer_id;
+        $referrals = $this->model('referrals')->getReferralsById($customer_id);
         $this->view('customer/profile', ['referrals' => $referrals, 'customer_id' => $customer_id]);
     }
 
     public function createCode()
     {
         if (isset($_POST['referralSubmission'])) {
-            $referral = $this->model('referrals');
+            $referral = $this->model('Referrals');
+            $customer_id = $_POST['customer_id'];
 
-            if ($referral->getReferralsById($_SESSION["user_id"]) == null) {
-                $referral = $referral->getReferralsById($_SESSION["user_id"]);
-                echo var_dump($referral);
-                $this->view('customer/profile', ['referrals' => $referral]);
+            if ($referral->getReferralsById($customer_id)) {
+                $referral = $referral->getReferralsById($customer_id);
+                $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $customer_id]);
+                
             }
             else
             {
                 $referral->referral_code = $_POST['referral_code'];
-                $referral->customer_id = $_SESSION["user_id"];
+                $referral->customer_id = $customer_id;
                 $referral->insert();
-                $this->view('customer/profile', ['referrals' => $referral]);
+                $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $referral->customer_id]);
             }
         }
     }

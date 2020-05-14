@@ -2,9 +2,9 @@
 
 class Referrals extends Model
 {
-    var $referral_code;
-    var $customer_id;
-    var $referral_uses;
+    public $referral_code;
+    public $customer_id;
+    public $referral_uses;
 
     public function get()
     {
@@ -17,10 +17,10 @@ class Referrals extends Model
 
     public function insert()
     {
-        $SQL = 'INSERT INTO refferals(referral_code, customer_id) VALUES(:referral_code, :customer_id)';
+        $SQL = 'INSERT INTO referrals(referral_code, customer_id) VALUES(:referral_code, :customer_id)';
         $stmt = self::$_connection->prepare($SQL);
         $stmt->execute(['referral_code'=>$this->referral_code, 'customer_id'=>$this->customer_id]);
-        return $stmt->rowCount();
+        return self::$_connection->lastInsertId();
     }
 
     public function getReferralByCode($code)

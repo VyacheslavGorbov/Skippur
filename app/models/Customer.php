@@ -12,7 +12,7 @@ class Customer extends Model
     	$sql = 'SELECT * FROM Customers';
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customers');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customer');
         return $stmt->fetchAll();
     }
 
@@ -20,7 +20,7 @@ class Customer extends Model
     	$sql = 'SELECT * FROM Customers WHERE customer_name LIKE :customer_name';
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute(['customer_name'=>$customer_name]);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customers');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customer');
         return $stmt->fetch();
     }
 
@@ -35,7 +35,7 @@ class Customer extends Model
     	$sql = 'SELECT * FROM Customers WHERE user_id = :user_id';
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute(['user_id'=>$user_id]);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customers');
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Customer');
         return $stmt->fetch();
     }
 
