@@ -10,7 +10,7 @@
 <body>
 	<div align="center">
 		Enter your registration information below
-		<form action='/customer/index' method="post" class="container">
+		<form action='' method="post" class="container">
 			<label>Name:</label><input type='text' name='customer_name' /><br />
 			<label>Email:</label><input type='text' name='customer_email' /><br />
 			<input type="submit" name="action" value="Register" class="btn btn-primary">

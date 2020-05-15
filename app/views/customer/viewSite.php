@@ -18,6 +18,12 @@
         <a href="/customer/appointments">My Appointments</a>
         <a href='/home/logout'>Logout</a>
     </nav>
+
+    <table class="table" style="text-align:center;">
+        <tr>
+            <th><a href="/customer/reviews/<?php echo $data['site']->site_id ?>">Reviews</a></th>
+        </tr>
+    </table>
     <h1 class='text-center'><?php echo $data['site']->site_name ?></h1>
     <div class="container">
         <div class="row">

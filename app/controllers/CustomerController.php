@@ -25,6 +25,8 @@ class CustomerController extends Controller
             $customer->customer_email = $customer_email;
             $customer->user_id = $user_id;
             $customer->insert();
+
+            header('location:/customer/index');
         } else {
             $this->view('customer/register');
         }
@@ -32,7 +34,7 @@ class CustomerController extends Controller
 
     public function profile()
     {
-        $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id'])->customer_id;
+        $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"])->customer_id;
         $referrals = $this->model('referrals')->getReferralsById($customer_id);
         $this->view('customer/profile', ['referrals' => $referrals, 'customer_id' => $customer_id]);
     }
@@ -46,15 +48,35 @@ class CustomerController extends Controller
             if ($referral->getReferralsById($customer_id)) {
                 $referral = $referral->getReferralsById($customer_id);
                 $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $customer_id]);
-                
-            }
-            else
-            {
+            } else {
                 $referral->referral_code = $_POST['referral_code'];
                 $referral->customer_id = $customer_id;
                 $referral->insert();
                 $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $referral->customer_id]);
             }
+        }
+    }
+
+    public function reviews($site_id)
+    {
+        $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
+        $site = $this->model('Site')->getSiteById($site_id);
+        $reviews = $this->model('Reviews')->getReviewsBySiteId($site_id);
+        $this->view('customer/reviews', ["customer" => $customer, "site" => $site, "reviews" => $reviews]);
+    }
+
+    public function addReview()
+    {
+        if (isset($_POST["review-submit"])) {
+
+            // add new review
+            $newReview = $this->model('Reviews');
+            $newReview->site_id = $_POST["site_id"];
+            $newReview->customer_id = $_POST["customer_id"];
+            $newReview->review_rating = $_POST["rating"];
+            $newReview->review_message = $_POST["comment"];
+            $newReview->insert();
+            header('location:/customer/reviews/'.$newReview->site_id);
         }
     }
 

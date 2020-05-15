@@ -71,7 +71,7 @@
                     $user->username = $username;
                     $user->password_hash = password_hash($password, PASSWORD_DEFAULT);//
                     $user->user_type = $user_type;
-                    $user->insert();//
+                    $user->insert();
 
                     $user = $this->model('User')->getUser($username);
 
