@@ -43,6 +43,7 @@
         <a href="/customer/appointments">My Appointments</a>
         <a href='/home/logout'>Logout</a>
     </nav>
+    <a href="/customer/viewSite/<?php echo $data['site']->site_id ?>">Back to bookings</a>
     <h2 class="text-center"><?php echo $data['site']->site_name ?> Reviews</h1>
         <br>
         <ul class="list-group" id="comment-section" style="width: 750px; height: 300px; overflow: auto; margin: 0 auto;">
