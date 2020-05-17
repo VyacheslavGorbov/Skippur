@@ -60,8 +60,36 @@ class CustomerController extends Controller
 
     public function messages()
     {
-        $messages = $this->model('Messages')->getUserMessagesById($_SESSION["user_id"]);
-        $this->view('customer/messages', ['messages' => $messages]);
+        $messages = $this->model('Messages')->getUsersMessages($_SESSION["user_id"]);
+        $sites = [];
+
+        foreach ($messages as $message) {
+            $manager_id = $this->model('User')->getUserById($message->receiver_id)->user_id;
+            $site = $this->model('Site')->getSite($manager_id);
+            array_push($sites, $site);
+        }
+
+        $this->view('customer/messages', $sites);
+    }
+
+    public function sendMessage($site_id)
+    {
+        $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
+        $site = $this->model('Site')->getSiteById($site_id);
+        $messages = $this->model('Messages')->getUserMessagesWithSite($customer->user_id, $site->manager_id);
+
+        if (isset($_POST["message-submit"])) {
+            $now = new DateTime();
+            $newMessage = $this->model('Messages');
+            $newMessage->sender_id = $customer->user_id;
+            $newMessage->receiver_id = $site->manager_id;
+            $newMessage->message = $_POST["message"];
+            $newMessage->time_sent =  $now->format('Y-m-d H:i:s');
+            $newMessage->insert();
+            header('location:/customer/sendMessage/'.$site->site_id);
+        }
+
+        $this->view('customer/sendMessage', ["customer" => $customer, "site" => $site, "messages"=>$messages]);
     }
 
     public function reviews($site_id)
@@ -83,7 +111,7 @@ class CustomerController extends Controller
             $newReview->review_rating = $_POST["rating"];
             $newReview->review_message = $_POST["comment"];
             $newReview->insert();
-            header('location:/customer/reviews/'.$newReview->site_id);
+            header('location:/customer/reviews/' . $newReview->site_id);
         }
     }
 

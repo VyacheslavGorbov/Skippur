@@ -21,18 +21,18 @@
         <a href="/customer/appointments">My Appointments</a>
         <a href='/home/logout'>Logout</a>
     </nav>
-    <h2 class="text-center">Your Messages</h1>
+    <h2 class="text-center">Your Messages</h2>
         <br>
         <ul class="list-group" id="messages" style="width: 750px; height: 300px; overflow: auto; margin: 0 auto;">
             <?php
-
-            if (!empty($data["messages"]))
-                foreach ($data["messages"] as $message) {
-                    echo "<li class='list-group-item'><strong>Name: </strong>" . 'placeholder name' . "<br>";
-                    echo "<strong>Message: </strong>" . 'placeholder message' . "</li>";
+            if (!empty($data))
+                foreach ($data as $site) {
+                    echo "<li class='list-group-item'><strong>Site Name: </strong>" . $site->site_name;
+                    echo "<a href='/customer/sendMessage/$site->site_id'><button class='btn btn-primary' style='float: right;'>Send Message</button></a>";
                 }
             ?>
         </ul>
+    </h2>
 
 
     <!-- Optional JavaScript -->

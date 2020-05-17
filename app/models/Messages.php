@@ -27,18 +27,18 @@ class Messages extends Model
 
     public function getUsersMessages($id)
     {
-        $SQL = 'SELECT * FROM messages WHERE sender_id = :sender_id OR receiver_id = :receiver_id';
+        $SQL = 'SELECT DISTINCT receiver_id FROM messages WHERE sender_id = :sender_id';
         $stmt = self::$_connection->prepare($SQL);
-        $stmt->execute(['sender_id'=>$id, 'receiver_id'=>$id]);
+        $stmt->execute(['sender_id'=>$id]);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'messages');
         return $stmt->fetchAll();
     }
 
-    public function getSites($id)
+    public function getUserMessagesWithSite($customer_id, $manager_id)
     {
-        $SQL = 'SELECT DISTINCT(sender_id) FROM messages WHERE sender_id = :sender_id OR receiver_id = :receiver_id';
+        $SQL = 'SELECT * FROM messages WHERE sender_id = :sender_id AND receiver_id = :receiver_id';
         $stmt = self::$_connection->prepare($SQL);
-        $stmt->execute(['sender_id'=>$id, 'receiver_id'=>$id]);
+        $stmt->execute(['sender_id'=>$customer_id, 'receiver_id'=>$manager_id]);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'messages');
         return $stmt->fetchAll();
     }

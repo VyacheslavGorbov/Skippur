@@ -2,6 +2,7 @@
 
 class User extends Model
 {
+    public $user_id;
     public $username;
     public $password_hash;
     public $user_type;
@@ -13,6 +14,15 @@ class User extends Model
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
         return $stmt->fetchAll();
+    }
+
+    function getUserById($id)
+    {
+        $sql = 'SELECT * FROM User WHERE user_id = :user_id';
+        $stmt = self::$_connection->prepare($sql);
+        $stmt->execute(['user_id'=>$id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'User');
+        return $stmt->fetch();
     }
 
 	function getUser($username){
