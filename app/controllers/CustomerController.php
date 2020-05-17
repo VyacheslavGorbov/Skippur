@@ -4,6 +4,9 @@ use function PHPSTORM_META\type;
 
 class CustomerController extends Controller{
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
 		public function index()
 		{
 			$customer = $this->model('Customer');
@@ -30,11 +33,17 @@ class CustomerController extends Controller{
             }
 		}
 		
+        /**
+        @accessFilter:{LoginFilter}
+        */
 		public function profile() {
 			$customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
 			$this->view('customer/profile', [$customer]);
 		}
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
 		public function viewSite($site_id, $month = '', $year = '') {
 
             if ($month == '' || $year == '') {
@@ -60,6 +69,9 @@ class CustomerController extends Controller{
             $this->view('customer/viewSite', ['site' => $site, 'calendar' => $calendar, 'site_services'=>$service_names]);
 		}
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
 		public function build_calendar($site_id, $month, $year){
 
             
@@ -174,6 +186,9 @@ class CustomerController extends Controller{
             $this->view('customer/viewSite', ['site' => $site, 'calendar' => $calender, 'site_services'=>$service_names]);
 		}
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function calender($site_id){
             $dateComponents = getdate();
@@ -182,21 +197,39 @@ class CustomerController extends Controller{
             header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
         public function next($site_id, $month, $year){
             header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
         public function current($site_id, $month, $year){
             header('location:/customer/build_calendar/' . $site_id. '/'. $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
         public function previous($site_id, $month, $year){
             header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
         }
 		
-		public function book($date) {
+        
 
-		}
+        /**
+        @accessFilter:{LoginFilter}
+        */
+        public function myAppointments(){
+            $customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
+            $bookings = $this->model('Bookings')->getCustomerBookings($customer->customer_id);
+            $this->view('customer/Appointments', ['bookings' => $bookings]);
+        }
+
+
 
 		
 

@@ -48,7 +48,7 @@
         </a>
         <a href="/customer/profile">Profile</a>
         <a href="/customer/messages">Messages</a>
-        <a href="/customer/appointments">My Appointments</a>
+        <a href="/customer/myAppointments">My Appointments</a>
         <a href='/home/logout'>Logout</a>
     </nav>
     </br>

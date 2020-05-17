@@ -57,8 +57,10 @@
 	</style>
 	<div align="center">
 		
-		<?php
-			echo $data['errorMessage'];
+		<?php if (strlen($data['errorMessage'])  > 1){
+			$message = $data['errorMessage'];
+		 	echo  "<center><div class='alert alert-danger' role='alert'> $message </div><center>"; 
+		 }
 		?>
 		
 	</br>

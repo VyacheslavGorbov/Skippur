@@ -7,7 +7,7 @@
 		public $service_industry_id;
 
 	    public function getServiceName($service_id){
-	    	//return all booking for an employee on a particular day
+	    	
 	    	$sql = 'SELECT * FROM Services WHERE service_id = :service_id';
 	        $stmt = self::$_connection->prepare($sql);
 	        $stmt->execute(['service_id'=>$service_id]);
@@ -16,7 +16,6 @@
     	}
 
     	public function getService($service_id){
-	    	//return all booking for an employee on a particular day
 	    	$sql = 'SELECT * FROM Services WHERE service_id = :service_id';
 	        $stmt = self::$_connection->prepare($sql);
 	        $stmt->execute(['service_id'=>$service_id]);

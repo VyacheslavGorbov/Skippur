@@ -9,6 +9,8 @@
             $this->view('home/index', ['users' => $users]);
         }
 
+        
+
         public function login()
         {
             $errorMessage = '';
@@ -58,15 +60,17 @@
 
         public function register()
         {
-
+            $errorMessage = '';
             if(isset($_POST['action'])){
                 $username = $_POST['username'];
                 $password = $_POST['password'];
                 $user_type = $_POST['user_type'];
                 $password_confirmation = $_POST['password_confirmation'];
 
+                $check = $this->model('User')->getUser($username);
 
-                if($password == $password_confirmation & isset($_POST['user_type'])){
+
+                if($password == $password_confirmation & isset($_POST['user_type']) & !($check) & $password == $password_confirmation){
                     $user = $this->model('User');
                     $user->username = $username;
                     $user->password_hash = password_hash($password, PASSWORD_DEFAULT);//
@@ -81,12 +85,16 @@
                         header('location:/Home/Login');
                     elseif ($user_type == 'Site')
                         header('location:/Site/Register');
-                        # code...
-                    
-                    //header('location:/Home/Login');
+                        
                 }else{
+                    if($check){
+                        $errorMessage = 'Username already exist';
+                    }
+                    elseif($password != $password_confirmation){
+                        $errorMessage = 'Password does not match Confirm Password';
+                    }
                     //provide an error message
-                    echo 'Invalid Registration';
+                    $this->view('home/register', ['errorMessage' => $errorMessage]);
                 }
             }else{
                 $this->view('home/register');
@@ -107,34 +115,46 @@
             if(isset($_POST['action'])){
                 $username = $_POST['username'];
                 $password = $_POST['password'];
-                if($_POST['Site'] != 'CHOOSE YOUR EMPLOYER'){
-                    $site_name = $_POST['Site'];
-                    $employee = $this->model('Employee')->getUser($username);
+                $employee = $this->model('Employee')->getUser($username);
+                $site_name = $_POST['Site'];
+                $site_id = -1;
+                if ($site_name != 'CHOOSE YOUR EMPLOYER'){
                     $site_id = $this->model('Site')->getSiteId($site_name)->site_id;
-                    if($employee != null){
-                        if(password_verify($password, $employee->employee_password) && $employee->site_id == $site_id){
-                            //$image= $this->model('Picture')->getPicture($employee->picture_id);
-                            $_SESSION['employee_id'] = $employee->employee_id;
-                            //header('location:/Home/employeeProfile', ['employee'=>$employee, 'site_name'=>$site_name]);
-                            header('location:/Home/employeeProfile');
-                           // $this->view('employee/employeeProfile', ['employee'=>$employee, 'image'=>$image, 'site_name'=>$site_name]);
-                        }
-                    } 
+                }
+                if($employee) {
+                    $site = $this->model('Site')->getSiteId($site_name);
+
+                    if (password_verify($password, $employee->employee_password) & $employee->site_id == $site_id){
+                        $_SESSION['employee_id'] = $employee->employee_id;
+                        header('location:/Home/employeeProfile');
+                    }
                     else{
-                        $errorMessage = 'ENTER A VALID USERNAME AND/OR PASSWORD COMBINATION';
+                        if (!(password_verify($password, $employee->employee_password))) 
+                            $errorMessage = 'Invalid Username and Password Combination';
+
+                        elseif ($employee->site_id != $site_id)
+                            $errorMessage = 'Employer Mismatch';
+
                         $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
                     }
                 }
-                
                 else{
-                    $errorMessage =  'YOU HAVE NOT SELECTED AN EMPLOYER';
-                    $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
+                    if($_POST['Site'] == 'CHOOSE YOUR EMPLOYER')
+                        $errorMessage = 'Please choose your employer';
+                    elseif (!$employee)
+                        $errorMessage = 'Username does not exist';
+                    
+
+                     $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]); 
                 }
             }
             else
                 $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
         }
 
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
         public function employeeProfile(){
             $employee = $this->model('Employee')->getEmployee($_SESSION['employee_id']);
             $site_name = $this->model('Site')->getSiteById($employee->site_id)->site_name;

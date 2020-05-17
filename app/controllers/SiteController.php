@@ -55,17 +55,9 @@
 
         
 
-        public function addEmployees(){
-
-        }
-
-        public function setAvailability(){
-
-        }
-
-        public function confirmAppointment(){
-
-        }
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function build_calender($month, $year){
         
@@ -196,6 +188,10 @@
            $this->view('site/calender', ['calender' => $calender, 'services' => $result]);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function calender(){
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
@@ -203,21 +199,41 @@
             header('location:/site/build_calender/' . $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function next($month, $year){
             header('location:/site/build_calender/' . $month .'/'. $year);
         }
+
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function current($month, $year){
             header('location:/site/build_calender/' . $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function previous($month, $year){
             header('location:/site/build_calender/' . $month .'/'. $year);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function set_Availability($date){
             echo $date;
         }
+
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function makeCard(){
             $manager_id = $_SESSION['user_id'];
@@ -271,10 +287,18 @@
 
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function homepage($site_id) {
             $site = $this->model('Site')->getSiteById($site_id);
             $this->view('site/homepage', $site);
         }
+
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function set_booking(){
             $customer_id = $_POST['customer_id'];
@@ -299,9 +323,17 @@
 
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function confirmation(){
-            echo "YEs";
+            $this->view('site/confirmation');
         }
+
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
 
         public function timeSlots($service_requests, $date, $site_id){
@@ -432,6 +464,21 @@
             $this->view('site/bookingSlots', ['slots' => $slots, 'date'=>$date, 'message'=>$message, 'services'=>$servi, 'site_id'=>$site_id, 'customer_id'=>$customer_id]);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
+        public function scheduleToday(){
+            $date = date('Y-m-d');
+            $site_id = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
+            $schedule = $this->model('Bookings')->getSiteSchedule($site_id, $date);
+            $this->view('site/site_schedule', ['schedule'=> $schedule]);
+
+        }
+
+        /**
+        @accessFilter:{LoginFilter}
+        */
 
         public function displaySiteSchedule($date){
             $site_id = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
@@ -441,6 +488,10 @@
             $this->view('site/site_schedule', ['schedule'=> $schedule]);
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
+
         public function getEmployeeName($employee_id){
              $firstName = $this->model('Employee')->getEmployee($employee_id)->employee_first_name;
              $lastName = $this->model('Employee')->getEmployee($employee_id)->employee_last_name;
@@ -449,6 +500,9 @@
         }
 
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
         public function saveService(){
 
             $site =  $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
@@ -466,17 +520,6 @@
 
         
         }
-
-
-
-
-
-
-        
-
-        
-
-
 	}
 
     class bookingEmp{

@@ -19,7 +19,6 @@
     	}
 
     	public function getSiteServices($site_id){
-	    	//return all booking for an employee on a particular day
 	    	$sql = 'SELECT * FROM Sites_Services WHERE site_id = :site_id';
 	        $stmt = self::$_connection->prepare($sql);
 	        $stmt->execute(['site_id' => $site_id]);
@@ -42,6 +41,8 @@
             $stmt->execute(['service_id'=>$this->service_id, 'site_id'=>$this->site_id]);
             return $stmt->rowCount();
         }
+
+        
 
 	}
 
