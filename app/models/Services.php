@@ -7,7 +7,15 @@
 		public $service_industry_id;
 
 	    public function getServiceName($service_id){
-	    	//return all booking for an employee on a particular day
+	    	
+	    	$sql = 'SELECT * FROM Services WHERE service_id = :service_id';
+	        $stmt = self::$_connection->prepare($sql);
+	        $stmt->execute(['service_id'=>$service_id]);
+	        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Services');
+	        return $stmt->fetch();
+    	}
+
+    	public function getService($service_id){
 	    	$sql = 'SELECT * FROM Services WHERE service_id = :service_id';
 	        $stmt = self::$_connection->prepare($sql);
 	        $stmt->execute(['service_id'=>$service_id]);
@@ -39,6 +47,8 @@
 	        $stmt->execute(['service_id'=>$this->service_id,'service_name'=>$this->service_name]);
 	        return self::$_connection->lastInsertId();
     	}
+
+    	
 
 	}
 

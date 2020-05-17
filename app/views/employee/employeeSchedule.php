@@ -9,6 +9,9 @@
       href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
       rel="stylesheet"
     />
+
+    
+  <style>
     <style>
                     * {
             box-sizing: border-box;
@@ -143,7 +146,11 @@
             .right {
               left: 0%;
             }
+
+
           }
+
+          
 
 
     </style>
@@ -151,6 +158,7 @@
     <title>Flipping Cards</title>
   </head>
   <body>
+   
           <div class="timeline">
             <?php foreach(array_chunk($data['schedule'] , 2) as $val) {  ?>
               

@@ -3,6 +3,9 @@
     @accessFilter{LoginFilter}
 */
 	class EmployeeController extends Controller{
+    /**
+        @accessFilter:{LoginFilter}
+    */    
 
 		public function add_employee()
         {
@@ -42,6 +45,9 @@
             }
         }
 
+        /**
+        @accessFilter:{LoginFilter}
+        */
         public function makeEmployeeInactive($employee_id){
             
             $theEmployee = $this->model('Employee')->getEmployee($employee_id);
@@ -50,9 +56,9 @@
             header('location:/Site/makeCard');
         }
 
-        public function Login(){
-
-        }
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
 
         public function build_calender($month, $year){
         
@@ -155,31 +161,45 @@
             $this->view('employee/employeeCalender', ['calender' => $calender]);
         }
 
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
+
         public function calender(){
-           // $calender  = new EmployeeController();
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
-            //$calender->build_calender($month,$year);
             header('location:/employee/build_calender/' . $month .'/'. $year);
         }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
 
         public function next($month, $year){
             header('location:/employee/build_calender/' . $month .'/'. $year);
-           // $calender  = new EmployeeController();
-           // $calender->build_calender($month,$year);
         }
 
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
+
         public function current($month, $year){
-           // $calender  = new EmployeeController();
-           // $calender->build_calender($month,$year);
             header('location:/employee/build_calender/' . $month .'/'. $year);
         }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
 
         public function previous($month, $year){
             $calender  = new EmployeeController();
             $calender->build_calender($month,$year);
         }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
 
         public function set_Availability(){
            
@@ -216,10 +236,51 @@
   
         }
 
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
         public function displayEmployeeSchedule(){
-            $date = "2020-05-20";  //I need to get the date
+
+            $date =  date('Y-m-d'); //"2020-05-20";
             $schedule = $this->model('Bookings')->getEmployeeSchedule($_SESSION['employee_id'], $date);
             $this->view('employee/employeeSchedule', ['schedule'=> $schedule]);
+        }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
+        public function newBookings(){
+            $status = "unconfirmed";
+            $bookings = $this->model('Bookings')->getEmployeesUnconfirmedBookings($_SESSION['employee_id'], $status);
+            $this->view('employee/confirmBookings', ['bookings'=> $bookings]);
+        }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
+        public function confirmBooking($booking_id){
+            $status = "confirmed";
+            $booking = $this->model('Bookings');
+            $booking->booking_id = $booking_id;
+            $booking->status = $status;
+            $booking->update();
+
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+        }
+
+        /**
+        @accessFilter:{EmployeeFilter}
+        */
+        public function declineBooking($booking_id){
+            $status = "declined";
+            $booking = $this->model('Bookings');
+            $booking->booking_id = $booking_id;
+            $booking->status = $status;
+            $booking->update();
+
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            
         }
 
 	}

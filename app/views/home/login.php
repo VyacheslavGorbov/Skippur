@@ -61,9 +61,13 @@
 
 	<div align="center">
 		<a href=/Home/employeeLogin> <button> CLICK HERE TO LOGIN AS EMPLOYEE</button></a><br>
-		<?php
-		echo $data['errorMessage'];
+		<?php if (strlen($data['errorMessage'])  > 1){
+			$message = $data['errorMessage'];
+		 	echo  "<center><div class='alert alert-danger' role='alert'> $message </div></center>"; 
+		 }
 		?>
+
+		
 		</br>
 
 		Enter your login information below

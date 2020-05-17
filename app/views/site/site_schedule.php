@@ -148,7 +148,7 @@
 
     </style>
     <link rel="stylesheet" href="css/style.css" />
-    <title>Flipping Cards</title>
+    <title>Schedule</title>
   </head>
   <body>
           <div class="timeline">

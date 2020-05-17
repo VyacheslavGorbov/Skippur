@@ -59,6 +59,11 @@
 </head>
 
 <body>
+	<?php if (strlen($data['errorMessage'])  > 1){
+			$message = $data['errorMessage'];
+		 	echo  "<center><div class='alert alert-danger' role='alert'> $message </div><center>"; 
+		 }
+		?>
 	<div align="center">
 		Enter your registration information below
 		<form action='' method="post" class='container'>
