@@ -22,7 +22,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col"><a href="/customer/sendMessage/<?php echo $data['site']->site_id ?>">Send Message</a></th>
+                <th scope="col"><a href="/customer/messages/<?php echo $data['site']->site_id ?>">Send Message</a></th>
                 <th scope="col"><a href="/customer/reviews/<?php echo $data['site']->site_id ?>">Reviews</a></th>
                 <th scope="col"><a href="/customer/videos/<?php echo $data['site']->site_id ?>">Videos</a></th>
             </tr>
