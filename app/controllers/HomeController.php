@@ -113,9 +113,11 @@
                     $site_id = $this->model('Site')->getSiteId($site_name)->site_id;
                     if($employee != null){
                         if(password_verify($password, $employee->employee_password) && $employee->site_id == $site_id){
-                            $image= $this->model('Picture')->getPicture($employee->picture_id);
+                            //$image= $this->model('Picture')->getPicture($employee->picture_id);
                             $_SESSION['employee_id'] = $employee->employee_id;
-                            $this->view('employee/employeeProfile', ['employee'=>$employee, 'image'=>$image, 'site_name'=>$site_name]);
+                            //header('location:/Home/employeeProfile', ['employee'=>$employee, 'site_name'=>$site_name]);
+                            header('location:/Home/employeeProfile');
+                           // $this->view('employee/employeeProfile', ['employee'=>$employee, 'image'=>$image, 'site_name'=>$site_name]);
                         }
                     } 
                     else{
@@ -131,6 +133,13 @@
             }
             else
                 $this->view('home/employee_login', ['sites'=>$sites, 'errorMessage' => $errorMessage]);
+        }
+
+        public function employeeProfile(){
+            $employee = $this->model('Employee')->getEmployee($_SESSION['employee_id']);
+            $site_name = $this->model('Site')->getSiteById($employee->site_id)->site_name;
+            $image= $this->model('Picture')->getPicture($employee->picture_id);
+            $this->view('employee/employeeProfile', ['employee'=>$employee, 'image'=>$image, 'site_name'=>$site_name]);
         }
         
     }

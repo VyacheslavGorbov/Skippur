@@ -37,18 +37,31 @@
 			  opacity: 0.7;
 
 			}
+			#my-div {
+    			background-color: #f00;
+    			width: 200px;
+    			height: 20px;
+    		}
+			a.fill-div {
+			display: block;
+		    height: 100%;
+		    width: 100%;
+		    text-decoration: none;
+		}
 
 
 		</style>
 	</head>
 	<body>
-		<div>
+		<div><a href="/site/calender"> BACK TO SITE</a>
+    		<center><a href="/employee/add_employee"> ADD EMPLOYEE</a></center>
+		</div>
+		
 			<?php
 				echo $data['cards'];
 			?>
 		</div>
-		<div>
-			<a href=/employee/add_employee><button> ADD EMPLOYEE</button></a>
+		
 	
 	</body>
 </html>

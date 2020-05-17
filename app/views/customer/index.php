@@ -111,7 +111,7 @@
                         "<br>" + site[1].site_address +
                         "<br>" + site[1].site_postal_code +
                         "<br>" + site[1].site_phone_number +
-                        "<br>" + '<a href="/customer/viewSite/' + site[1].site_id + '">Visit Page</a>');
+                        "<br>" + '<a href="/customer/calender/' + site[1].site_id + '">Visit Page</a>');
                 });
             }
         </script>

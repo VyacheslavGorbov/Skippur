@@ -153,29 +153,22 @@
         }
 
         public function calender(){
-           // $calender  = new EmployeeController();
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
-            //$calender->build_calender($month,$year);
             header('location:/employee/build_calender/' . $month .'/'. $year);
         }
 
         public function next($month, $year){
             header('location:/employee/build_calender/' . $month .'/'. $year);
-           // $calender  = new EmployeeController();
-           // $calender->build_calender($month,$year);
         }
 
         public function current($month, $year){
-           // $calender  = new EmployeeController();
-           // $calender->build_calender($month,$year);
             header('location:/employee/build_calender/' . $month .'/'. $year);
         }
 
         public function previous($month, $year){
-            $calender  = new EmployeeController();
-            $calender->build_calender($month,$year);
+            header('location:/employee/build_calender/' . $month .'/'. $year);
         }
 
         public function set_Availability(){

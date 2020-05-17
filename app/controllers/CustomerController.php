@@ -42,19 +42,27 @@ class CustomerController extends Controller{
                 $year = date('Y');
             }
 
+            
+            $site_services = $this->model('Sites_Services')->getSiteServices($site_id);
+            $service_names = [];
+
+            foreach ($site_services as $services) {
+                $serv = $this->model('Services')->getServiceName($services->service_id);
+                if ($serv)
+                    array_push($service_names, $serv );
+                # code...
+            }
+
+
+            
 			$calendar = $this->build_calendar($site_id, intval($month), intval($year));
 			$site = $this->model('Site')->getSiteById($site_id);
-            $this->view('customer/viewSite', ['site' => $site, 'calendar' => $calendar]);
+            $this->view('customer/viewSite', ['site' => $site, 'calendar' => $calendar, 'site_services'=>$service_names]);
 		}
 
 		public function build_calendar($site_id, $month, $year){
-            if($month == 0) {
-                $month = 12;
-            }
 
-            if($month == 13) {
-                $month = 1;
-            }
+            
             //Creating an array containing names of all days in a week.
             $daysOfWeek = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
 
@@ -79,11 +87,14 @@ class CustomerController extends Controller{
             //Creating the HTML table
             $calender="<table class='table table-bordered'>";
             $calender.="<center><h2>$monthName $year</h2>";
-            $calender.="<a class='btn btn-xs btn-primary' href='/customer/viewSite/".  $site_id . '/' . strval($month - 1) . '/'. strval($year) . "'>Previous Month</a>";
+            
 
-            $calender.="<a class='btn btn-xs btn-primary' href='/customer/viewSite/". $site_id. "'>Current Month</a>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/customer/previous/". $site_id . "/" .date('m',mktime(0,0,0,$month-1, 1, $year))."/".date('Y', mktime(0,0,0, $month-1, 1,$year))."'>Previous Month</a>";
 
-            $calender.="<a class='btn btn-xs btn-primary' href='/customer/viewSite/". $site_id . "/" . strval($month + 1) . "/" . strval($year)."'>Next Month</a></center><br>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/customer/current/". $site_id . "/".date('m')."/".date('Y')."'>Current Month</a>";
+
+            $calender.="<a class='btn btn-xs btn-primary' href='/customer/next/". $site_id . "/".date('m',mktime(0,0,0,$month+1, 1, $year))."/".date('Y', mktime(0,0,0, $month+1, 1,$year))."'>Next Month</a></center><br>";
+            
 
 
             $calender.="<tr>";
@@ -127,7 +138,7 @@ class CustomerController extends Controller{
                 if($date<date('Y-m-d')){
                     $calender.="<td><h4>$currentDay</h4><button class='btn btn-danger btn-xs'>N/A</button>";
                 }else{
-                    $calender.="<td class='$today'><h4>$currentDay</h4><a href='/customer/book/$date' class='btn btn-success btn-xs'>Book</a>";
+                    $calender.="<td class='$today'><h4>$currentDay</h4><button class='btn btn-success btn-xs book' date=$date>Book</button>";
                 }
 
 
@@ -150,8 +161,38 @@ class CustomerController extends Controller{
             $calender.="</tr>";
             $calender.="</tr>";
 
-            return $calender;
+            $site_services = $this->model('Sites_Services')->getSiteServices($site_id);
+            $service_names = [];
+
+            foreach ($site_services as $services) {
+                $serv = $this->model('Services')->getServiceName($services->service_id);
+                if ($serv)
+                    array_push($service_names, $serv );
+                # code...
+            }
+             $site = $this->model('Site')->getSiteById($site_id);
+            $this->view('customer/viewSite', ['site' => $site, 'calendar' => $calender, 'site_services'=>$service_names]);
 		}
+
+
+        public function calender($site_id){
+            $dateComponents = getdate();
+            $month = $dateComponents['mon'];
+            $year = $dateComponents['year'];
+            header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
+        }
+
+        public function next($site_id, $month, $year){
+            header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
+        }
+
+        public function current($site_id, $month, $year){
+            header('location:/customer/build_calendar/' . $site_id. '/'. $month .'/'. $year);
+        }
+
+        public function previous($site_id, $month, $year){
+            header('location:/customer/build_calendar/'. $site_id. '/' . $month .'/'. $year);
+        }
 		
 		public function book($date) {
 

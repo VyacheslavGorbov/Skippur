@@ -94,11 +94,11 @@
             //Creating the HTML table
             $calender="<table class='table table-bordered'>";
             $calender.="<center><h2>$monthName $year</h2>";
-            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m',mktime(0,0,0,$month-1, 1, $year))."/".date('Y', mktime(0,0,0, $month-1, 1,$year))."'>Previous Month</a>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/site/previous/".date('m',mktime(0,0,0,$month-1, 1, $year))."/".date('Y', mktime(0,0,0, $month-1, 1,$year))."'>Previous Month</a>";
 
-            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m')."/".date('Y')."'>Current Month</a>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/site/current/".date('m')."/".date('Y')."'>Current Month</a>";
 
-            $calender.="<a class='btn btn-xs btn-primary' href='/Site/build_calender/".date('m',mktime(0,0,0,$month+1, 1, $year))."/".date('Y', mktime(0,0,0, $month+1, 1,$year))."'>Next Month</a></center><br>";
+            $calender.="<a class='btn btn-xs btn-primary' href='/site/next/".date('m',mktime(0,0,0,$month+1, 1, $year))."/".date('Y', mktime(0,0,0, $month+1, 1,$year))."'>Next Month</a></center><br>";
 
 
             $calender.="<tr>";
@@ -169,20 +169,50 @@
            $site = $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
         
            $business_domain = $this->model('Site')->getSite($_SESSION['user_id'])->business_domain;
+
+          
         
            $industry_category = $this->model('Service_Industries')->getIndustryCategoryByName($business_domain)->industry_category_id;
+           $services = $this->model('Services')->getServices($industry_category);
+           $service_array = [];
+           $our_services_names = [];
+
+           $our_services = $this->model('Sites_Services')->getSiteServices($site);
+
+           foreach ($services as $serv) {
+               array_push($service_array, $serv->service_name);
+           }
+
+           foreach ($our_services as $our_service) {
+                $name = $this->model('Services')->getService($our_service->service_id)->service_name;
+                array_push($our_services_names, $name);
+               
+           }
+
+           $result = array_diff($service_array, $our_services_names);
+
            
 
-           $services = $this->model('Services')->getServices($industry_category);
-           $this->view('site/calender', ['calender' => $calender, 'services' => $services]);
+           $this->view('site/calender', ['calender' => $calender, 'services' => $result]);
         }
 
         public function calender(){
-            $site  = new SiteController();
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
-            $site->build_calender($month,$year);
+            header('location:/site/build_calender/' . $month .'/'. $year);
+        }
+
+        public function next($month, $year){
+            header('location:/site/build_calender/' . $month .'/'. $year);
+        }
+
+        public function current($month, $year){
+            header('location:/site/build_calender/' . $month .'/'. $year);
+        }
+
+        public function previous($month, $year){
+            header('location:/site/build_calender/' . $month .'/'. $year);
         }
 
         public function set_Availability($date){
@@ -237,7 +267,7 @@
             $cards .= "</tr>";
 
 
-            $this->view('site/siteEmployees', ['cards' => $cards]);
+            $this->view('site/siteEmployees', ['cards' => $cards, 'site_id'=>$site_id]);
 
         }
 
@@ -247,102 +277,159 @@
         }
 
         public function set_booking(){
+            $customer_id = $_POST['customer_id'];
+            $site_id = $_POST['site_id'];
+            $employee_id = $_POST['employee_id'];
+            $booking_date = $_POST['date'];
+            $start_time = $_POST['start'];
+            $end_time = $_POST['end'];
+            $message = $_POST['message'];
+            $service = $_POST['service'];
+            $thisBooking = $this->model('Bookings');
+            $thisBooking->employee_id = $employee_id;
+            $thisBooking->customer_id = $customer_id;
+            $thisBooking->booking_date = $booking_date;
+            $thisBooking->start_time = $start_time;
+            $thisBooking->end_time = $end_time;
+            $thisBooking->site_id = $site_id;
+            $thisBooking->status = "unconfirmed";
+            $thisBooking->message = $message;
+            $thisBooking->service = $service;
+            $thisBooking->insert();
 
         }
 
+        public function confirmation(){
+            echo "YEs";
+        }
 
-        public function timeSlots(){
-            $site_id = 99;
-            $date = "2020-05-20";
-            $duration = 30;
+
+        public function timeSlots($service_requests, $date, $site_id){
+            
             $cleanup = 0;
             $count = 0;
-            $Services = array('haircut','manicure and pedicure');
-            $serv = implode(',', $Services);
-            $site_availability = $this->model('Employee_Availabilities')->getSiteAvailability($site_id, $date);
+            $servi = [];
+            $message = "";
+            $services = explode(',', $service_requests);
+            $time_required = 0;
+            
+            $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id'])->customer_id;
 
-            $slots = array();
-            foreach ($site_availability as $emp_avail_today) {
-               
-                # code...
-                $start = new DateTime($emp_avail_today->e_availability_start_time);
-                $end = new DateTime($emp_avail_today->e_availability_end_time);
-                $break_start = new DateTime($emp_avail_today->e_availability_break_start);
-                $break_end = new DateTime($emp_avail_today->e_availability_break_end);
-                $interval = new DateInterval("PT".$duration."M");
-                $bookingEmployee = new bookingEmp();
-                $bookingEmployee->id = $emp_avail_today->employee_id;
-                $bookingEmployee->listOfSlots = array();
-                $cleanupInterval = new DateInterval("PT".$cleanup."M");
+            foreach ($services as $service) {
+                array_push($servi, $this->model('Services')->getServiceName($service)->service_name);
+            }
 
+            $servi = implode(',', $servi);
+
+            foreach ($services as $service_request) {
+
+                $dur = $this->model('Sites_Services')->getSiteService($service_request, $site_id)->service_duration;
+                $time_required = $time_required + $dur;
                 
-                $tempStartEnd =  new DateTime($emp_avail_today->e_availability_start_time);
-                $temEnd = $tempStartEnd->add($interval);
-                
-                $employee_bookings = $this->model("Bookings")->getEmployeeBookings($emp_avail_today->employee_id, $date);
+            }
 
-                if($employee_bookings){
+            $duration = $time_required;
 
-                    $setPoint = $start;
+            //get every employee working for the site.
+            $employees = $this->model('Employee')->All($site_id, $status = 'active');
 
-                    for($intStart = $start; $intStart < $end; $intStart->add($interval)->add($cleanupInterval)){
+            $slots = array(); //new slot containing employee info and available slots for the day.
+            foreach ($employees as $employee) {
 
-                        foreach ($employee_bookings as $booking) {
-                            $bookingStart = new DateTime($booking->start_time);
-                            $bookingEnd = new DateTime($booking->end_time);
+                //get the employee's availability for the day
+                $emp_availability = $this->model('Employee_Availabilities')->getAvailability($employee->employee_id, $date);
 
+                if ($emp_availability){
+                    //get information about employee's availability for the day
+                    $start = new DateTime($emp_availability->e_availability_start_time);
+                    $end = new DateTime($emp_availability->e_availability_end_time);
+                    $break_start = new DateTime($emp_availability->e_availability_break_start);
+                    $break_end = new DateTime($emp_availability->e_availability_break_end);
+                    $interval = new DateInterval("PT".$duration."M");
+                    $cleanupInterval = new DateInterval("PT".$cleanup."M");
+
+                    //declare new booking slot containing slots for an employee for the day
+                    $bookingEmployee = new bookingEmp();
+
+                    $bookingEmployee->employee_id = $emp_availability->employee_id;
+                    $bookingEmployee->listOfSlots = array();
+
+                    $tempStartEnd =  new DateTime($emp_availability->e_availability_start_time);
+                    $temEnd = $tempStartEnd->add($interval);
+
+                    $employee_bookings = $this->model("Bookings")->getEmployeeBookings($emp_availability->employee_id, $date);
+
+                    if($employee_bookings){
+
+                        $setPoint = $start;
+
+                        for($intStart = $start; $intStart < $end; $intStart->add($interval)->add($cleanupInterval)){
+
+                            foreach ($employee_bookings as $booking) {
+                                $bookingStart = new DateTime($booking->start_time);
+                                $bookingEnd = new DateTime($booking->end_time);
+
+                                $endPoint = clone $intStart;
+                                $endPoint->add($interval);
+
+                                if (($intStart == $bookingStart) || (($intStart < $bookingStart) && ($endPoint > $bookingStart)) || (($intStart > $bookingStart) && ($endPoint < $bookingEnd)) || (($bookingStart < $intStart) && ($intStart < $bookingEnd))){
+                                $intStart = $bookingEnd;
+                                $tempEnd = clone $intStart;
+                                $endPoint = $tempEnd->add($interval);
+                                }
+                            }
+
+                            if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
+                            $intStart = $break_end;
+                            $tempEnd = clone $intStart;
+                            $endPoint = $tempEnd->add($interval);
+                            }
+
+                            if($endPoint <= $end){
+                                $thisSlot =  new slot();
+                                $thisSlot->start_time = date("H:i:s", strtotime(date_format($intStart, 'Y-m-d H:i:s')));
+                                $thisSlot->end_time = date("H:i:s", strtotime(date_format($endPoint, 'Y-m-d H:i:s')));
+                                $thisSlot->slot_string = $intStart->format("H:iA"). " - " .$endPoint->format("H:iA");
+                                array_push($bookingEmployee->listOfSlots, $thisSlot);
+                            }
+                        
+                            $temEnd = $endPoint;
+                        }
+                        array_push($slots, $bookingEmployee);
+                    }
+                    else{
+                        for($intStart = $start ; $temEnd < $end ; $intStart->add($interval)->add($cleanupInterval)){
                             $endPoint = clone $intStart;
                             $endPoint->add($interval);
 
 
-                            if (($intStart == $bookingStart) || (($intStart < $bookingStart) && ($endPoint > $bookingStart)) || (($intStart > $bookingStart) && ($endPoint < $bookingEnd)) || (($bookingStart < $intStart) && ($intStart < $bookingEnd))){
-                                $intStart = $bookingEnd;
+                            if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
+                                $intStart = $break_end;
                                 $tempEnd = clone $intStart;
                                 $endPoint = $tempEnd->add($interval);
                             }
-                        }
-
-                        if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
-                            $intStart = $break_end;
-                            $tempEnd = clone $intStart;
-                            $endPoint = $tempEnd->add($interval);
-                        }
-
-                        if($endPoint <= $end){
-                            $newSlot = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
-                            array_push($bookingEmployee->listOfSlots, $newSlot);
-                        }
                         
-                        $temEnd = $endPoint;
-                        
-                    }
-                   array_push($slots, $bookingEmployee);
-                }
-                else{
-                    for($intStart = $start ; $temEnd < $end ; $intStart->add($interval)->add($cleanupInterval)){
-                        $endPoint = clone $intStart;
-                        $endPoint->add($interval);
-
-
-                        if (($intStart == $break_start) || (($intStart < $break_start) && ($endPoint > $break_start)) || (($intStart > $break_start) && ($endPoint < $break_end)) || (($break_start < $intStart) && ($intStart < $break_end))){
-                            $intStart = $break_end;
-                            $tempEnd = clone $intStart;
-                            $endPoint = $tempEnd->add($interval);
+                            
+                            if($endPoint <=  $end){
+                                $thisSlot =  new slot();
+                                $thisSlot->start_time = date("H:i:s", strtotime(date_format($intStart, 'Y-m-d H:i:s')));
+                                $thisSlot->end_time = date("H:i:s", strtotime(date_format($endPoint, 'Y-m-d H:i:s')));
+                                $thisSlot->slot_string = $intStart->format("H:iA"). " - " .$endPoint->format("H:iA");
+                                array_push($bookingEmployee->listOfSlots, $thisSlot);
+                            }
+                            $temEnd = $endPoint;
                         }
 
-                        if($endPoint <=  $end){
-                            $newSlot = $intStart->format("H:iA"). "-" .$endPoint->format("H:iA");
-                            array_push($bookingEmployee->listOfSlots, $newSlot);
-                        }
-                        $temEnd = $endPoint;
+                        array_push($slots, $bookingEmployee);
                     }
-
-                    array_push($slots, $bookingEmployee);
                 }
-
             }
-            $this->view('site/bookingSlots', ['slots' => $slots, 'date'=>$date, 'services'=>$serv]);
+            $site_name = $this->model('Site')->getSiteById($site_id)->site_name;
 
+            if(empty($slots)){
+                $message = $site_name . " doesn't have a booking slot set at the moment, check back later";
+            }
+            $this->view('site/bookingSlots', ['slots' => $slots, 'date'=>$date, 'message'=>$message, 'services'=>$servi, 'site_id'=>$site_id, 'customer_id'=>$customer_id]);
         }
 
 
@@ -362,6 +449,27 @@
         }
 
 
+        public function saveService(){
+
+            $site =  $this->model('Site')->getSite($_SESSION['user_id'])->site_id;
+            $price = $_POST['price'];
+            $duration = $_POST['duration'];
+            $service = $_POST['service'];
+            $service_id = $this->model('Services')->getServiceId($service)->service_id;
+            $site_service = $this->model('Sites_Services');
+            $site_service->service_id = $service_id;
+            $site_service->site_id = $site;
+            $site_service->cost = $price;
+            $site_service->service_duration = $duration;
+                    
+            $site_service->insert();
+
+        
+        }
+
+
+
+
 
 
         
@@ -375,4 +483,10 @@
         public $employee_id;
         public $listOfSlots;
 
+    }
+
+    class slot{
+        public $start_time;
+        public $end_time;
+        public $slot_string;
     }
