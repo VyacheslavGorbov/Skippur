@@ -23,6 +23,21 @@
         nav {
             text-align: center;
         }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: auto;
+            text-align: center;
+            font-family: arial;
+        }
+
+        .title {
+            color: grey;
+            font-size: 18px;
+        }
+
+
     </style>
     <script>
         function generateReferral() {
@@ -56,25 +71,31 @@
         <a href='/home/logout'>Logout</a>
     </nav>
     <br>
+    <h2 class="text-center">My Profile Card</h2>
+    <div class="card">
+        <img src="/images/download.jpg" style="width:100%">
+        <h1><?php echo $data['customer']->customer_name?></h1>
+        <p class="title"><?php echo $data['customer']->customer_email?></p>
+        <div style="margin: 24px 0;">
+        </div>
+    </div>
+    <br>
     <h2 class="text-center">My Referrals</h2>
     <br>
     <div id="errorMsg"></div>
-    <?php 
-    
-    if (!empty($data['referrals']))
-    {
+    <?php
+
+    if (!empty($data['referrals'])) {
         echo '<span class="border border-primary rounded" style="font-size: 25px; background-color:white;">' . $data['referrals']->referral_code . '</span><br>';
-        echo '<span style="font-size: 20px">You have '. $data['referrals']->referral_uses . ' referral uses remaining.</span>';
-    }
-    else
-    {
+        echo '<span style="font-size: 20px">You have ' . $data['referrals']->referral_uses . ' referral uses remaining.</span>';
+    } else {
         echo '<span class="border border-primary rounded" style="font-size: 25px; background-color:white;">###########</span>';
     }
-    
+
     ?>
     <form action='/customer/createCode' method='post'>
         <input id='referral' type='hidden' name='referral_code' readonly />
-        <input name='customer_id' type='hidden' value=<?php echo $data['customer_id'] ?>>
+        <input name='customer_id' type='hidden' value=<?php echo $data['customer']->customer_id ?>>
         <button onclick="generateReferral()" type='submit' name='referralSubmission' class='btn btn-primary'>Generate Referral Code</button>
     </form>
 

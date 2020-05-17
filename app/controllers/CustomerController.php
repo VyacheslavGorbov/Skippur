@@ -34,9 +34,9 @@ class CustomerController extends Controller
 
     public function profile()
     {
-        $customer_id = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"])->customer_id;
-        $referrals = $this->model('referrals')->getReferralsById($customer_id);
-        $this->view('customer/profile', ['referrals' => $referrals, 'customer_id' => $customer_id]);
+        $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
+        $referrals = $this->model('referrals')->getReferralsById($customer->customer_id);
+        $this->view('customer/profile', ['referrals' => $referrals, 'customer' => $customer]);
     }
 
     public function createCode()
@@ -44,17 +44,24 @@ class CustomerController extends Controller
         if (isset($_POST['referralSubmission'])) {
             $referral = $this->model('Referrals');
             $customer_id = $_POST['customer_id'];
+            $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
 
             if ($referral->getReferralsById($customer_id)) {
                 $referral = $referral->getReferralsById($customer_id);
-                $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $customer_id]);
+                $this->view('customer/profile', ['referrals' => $referral, 'customer' => $customer]);
             } else {
                 $referral->referral_code = $_POST['referral_code'];
                 $referral->customer_id = $customer_id;
                 $referral->insert();
-                $this->view('customer/profile', ['referrals' => $referral, 'customer_id' => $referral->customer_id]);
+                $this->view('customer/profile', ['referrals' => $referral, 'customer' => $customer]);
             }
         }
+    }
+
+    public function messages()
+    {
+        $messages = $this->model('Messages')->getUserMessagesById($_SESSION["user_id"]);
+        $this->view('customer/messages', ['messages' => $messages]);
     }
 
     public function reviews($site_id)
