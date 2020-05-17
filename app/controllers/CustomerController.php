@@ -57,6 +57,14 @@ class CustomerController extends Controller
         }
     }
 
+    public function messages($site_id)
+    {
+        $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
+        $site = $this->model('Site')->getSiteById($site_id);
+        
+        $this->view('customer/messages');
+    }
+
     public function reviews($site_id)
     {
         $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
