@@ -272,7 +272,7 @@
             $site = $this->model('Site')->getSiteById($thisBooking->site_id);
             $site_user_id = $site->manager_id;
             $now = new DateTime();
-            $sender_id = $site_user_id;
+            $sender_id = 73;
             $receiver_id = $this->model('Customer')->getCustomerByCustomerId($thisBooking->customer_id)->user_id;
             $Message = "Your booking has been confirmed with " . $site->site_name . " on " . $thisBooking->booking_date . " At " . $thisBooking->start_time . ". Please come on time. Thank you";
             //Send message to notify customer of the confirmation
@@ -305,7 +305,7 @@
             $site = $this->model('Site')->getSiteById($thisBooking->site_id);
             $site_user_id = $site->manager_id;
             $now = new DateTime();
-            $sender_id = $site_user_id;
+            $sender_id = 73;
             $receiver_id = $this->model('Customer')->getCustomerByCustomerId($thisBooking->customer_id)->user_id;
             $Message = "Your booking with " . $site->site_name . " on " . $thisBooking->booking_date . " At " . $thisBooking->start_time . ". has been declined. We are sorry for the inconvenience";
             //Send message to notify customer of the confirmation

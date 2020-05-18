@@ -163,6 +163,7 @@
                     <p><b>Message: </b><?php echo $val[0]->message ?> </p>
                   </div>
                 </div>
+                <?php if(array_key_exists(1, $val)) { ?>
                 <div class="container right">
                   <div class="content">
                     <h2><?php echo date("g:i A", strtotime($val[1]->start_time)) . ' - ' . date("g:i A", strtotime($val[1]->end_time)) ?></h2>
@@ -171,6 +172,7 @@
                     <p><b>Message: </b><?php echo $val[1]->message ?> </p>
                   </div>
                 </div>
+                <?php } ?>
                 <?php } ?>
             </div>
   </body>
