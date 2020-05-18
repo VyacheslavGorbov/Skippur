@@ -30,7 +30,8 @@ class CustomerController extends Controller{
             	$customer->customer_name = $customer_name;
             	$customer->customer_email = $customer_email;
             	$customer->user_id = $user_id;
-            	$customer->insert();
+                $customer->insert();
+                header('location:/customer/index');
                 
 			 }else{
                 $this->view('customer/register');
