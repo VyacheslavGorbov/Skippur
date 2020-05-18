@@ -48,7 +48,7 @@
         if (!empty($data["messages"]))
             foreach ($data["messages"] as $message) {
                 $sendertype = $this->model('User')->getUserById($message->sender_id)->user_type;
-                echo var_dump($sendertype);
+                
                 
                 if ($sendertype == 'Customer'){
                     $sender_name = $this->model('Customer')->getCustomerByUserId($message->sender_id)->customer_name;
@@ -57,7 +57,7 @@
                     $sender_name = $this->model('Site')->getSite($message->sender_id)->site_name;
                 }
                 
-                echo var_dump($sender_name);
+                
                 echo "<li class='list-group-item'><strong>" . $sender_name . ":</strong> ";
                 echo $message->message;
                 echo "<p style='color: #B8B8B8;text-align: right;'>" . $message->time_sent . "</p></li>";

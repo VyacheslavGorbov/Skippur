@@ -72,7 +72,7 @@
         </a>
         <a href="/customer/profile">Profile</a>
         <a href="/customer/messages">Messages</a>
-        <a href="/customer/myAppointments">My Appointments</a>
+        <a href="/customer/index">Home</a>
         <a href='/home/logout' class="topcorner">Logout</a>
     </nav>
 		<table class="test"  style="margin-left:auto;margin-right:auto;">

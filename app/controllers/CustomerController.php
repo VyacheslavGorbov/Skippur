@@ -313,9 +313,41 @@ class CustomerController extends Controller{
         @accessFilter:{LoginFilter}
         */
         public function myAppointments(){
+            
             $customer = $this->model('Customer')->getCustomerByUserId($_SESSION['user_id']);
             $bookings = $this->model('Bookings')->getCustomerBookings($customer->customer_id);
             $this->view('customer/Appointments', ['bookings' => $bookings]);
+        }
+
+        public function cancelBooking($booking_id){
+            $status = "cancelled";
+            $booking = $this->model('Bookings');
+            $booking->booking_id = $booking_id;
+            $booking->status = $status;
+            $booking->update();
+
+            $thisBooking = $this->model('Bookings')->getBooking($booking_id);
+
+            
+            $site = $this->model('Site')->getSiteById($thisBooking->site_id);
+            $site_user_id = $site->manager_id;
+            $now = new DateTime();
+            $receiver_id = $site_user_id;
+            $customer = $this->model('Customer')->getCustomerByCustomerId($thisBooking->customer_id);
+            $sender_id = $customer->user_id;
+            $Message = "Your booking with " . $customer->name . " on " . $thisBooking->booking_date . " At " . $thisBooking->start_time . ". has been cancelled by the customer";
+            //Send message to notify customer of the confirmation
+
+            $message = $this->model('Messages');
+            $message->time_sent = $now->format('Y-m-d H:i:s');
+            $message->sender_id = $sender_id;
+            $message->receiver_id = $receiver_id;
+            $message->message = $Message;
+
+            $message->insert();
+
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+            
         }
 
 

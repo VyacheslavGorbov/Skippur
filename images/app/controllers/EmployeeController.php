@@ -1,11 +1,5 @@
 <?php
-    /**
-    @accessFilter{LoginFilter}
-*/
 	class EmployeeController extends Controller{
-    /**
-        @accessFilter:{LoginFilter}
-    */    
 
 		public function add_employee()
         {
@@ -26,6 +20,7 @@
                 $employee->employee_username = $employee_username;
                 $employee->status = $employee_status;
                 $employee->employee_password = password_hash($employee_password, PASSWORD_DEFAULT);
+                $picture_id;
                 
             	if(isset($_FILES['image'])){
                     $target = "images/".basename($_FILES["image"]["name"]);
@@ -45,9 +40,6 @@
             }
         }
 
-        /**
-        @accessFilter:{LoginFilter}
-        */
         public function makeEmployeeInactive($employee_id){
             
             $theEmployee = $this->model('Employee')->getEmployee($employee_id);
@@ -56,9 +48,9 @@
             header('location:/Site/makeCard');
         }
 
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
+        public function Login(){
+
+        }
 
         public function build_calender($month, $year){
         
@@ -133,7 +125,7 @@
 
                 $today = $date == date('Y-m-d')? "today" : "";
                 if($date<date('Y-m-d')){
-                    $calender.="<td><h4>$currentDay</h4><button class='btn btn-danger btn-xs'>N/A</button>";
+                    $calender.="<td><h4>$currentDay</h4><button class='btn btn danger btn-xs'>N/A</button>";
                 }else{
                    $calender.="<td class='$today'><h4>$currentDay</h4><button class='btn btn-success btn-xs setAvail' timeAvail=$date>Set Availability</button>";
                 }
@@ -161,45 +153,28 @@
             $this->view('employee/employeeCalender', ['calender' => $calender]);
         }
 
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
-
         public function calender(){
+            $calender  = new EmployeeController();
             $dateComponents = getdate();
             $month = $dateComponents['mon'];
             $year = $dateComponents['year'];
-            header('location:/employee/build_calender/' . $month .'/'. $year);
+            $calender->build_calender($month,$year);
         }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
 
         public function next($month, $year){
-            header('location:/employee/build_calender/' . $month .'/'. $year);
+            $calender  = new EmployeeController();
+            $calender->build_calender($month,$year);
         }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
 
         public function current($month, $year){
-            header('location:/employee/build_calender/' . $month .'/'. $year);
+            $calender  = new EmployeeController();
+            $calender->build_calender($month,$year);
         }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
 
         public function previous($month, $year){
             $calender  = new EmployeeController();
             $calender->build_calender($month,$year);
         }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
 
         public function set_Availability(){
            
@@ -220,106 +195,27 @@
             $availability->site_id = $site_id;
             $availability->e_availability_date = $availability_date;
 
-            $result = $this->model('Employee_Availabilities')->getAvailability($employee_id, $availability_date);
+            $num = $availability->insert();
 
-            if (!$result){
+            echo $num;
 
-                $num = $availability->insert();
-                
-            }else{
-                
-                $num = $availability->update($employee_id, $availability_date);
-                
-            }
+            echo $employee_id;
+            echo '/n';
+            echo $site_id;
+            echo '/n';
+            echo $availability_start_time;
+            echo '/n';
+            echo $availability_end_time;
+            echo '/n';
+            echo $availability_break_start;
+            echo '/n';
+            echo $availability_break_end;
+            echo '/n';
+            echo $availability_date;
+           
 
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-  
-        }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
-        public function displayEmployeeSchedule(){
-
-            $date =  date('Y-m-d'); //"2020-05-20";
-            $schedule = $this->model('Bookings')->getEmployeeSchedule($_SESSION['employee_id'], $date);
-            $this->view('employee/employeeSchedule', ['schedule'=> $schedule]);
-        }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
-        public function newBookings(){
-            $status = "unconfirmed";
-            $bookings = $this->model('Bookings')->getEmployeesUnconfirmedBookings($_SESSION['employee_id'], $status);
-            $this->view('employee/confirmBookings', ['bookings'=> $bookings]);
-        }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
-        public function confirmBooking($booking_id){
-            $status = "confirmed";
-            $booking = $this->model('Bookings');
-            $booking->booking_id = $booking_id;
-            $booking->status = $status;
-            $booking->update();
-
-
-            $thisBooking = $this->model('Bookings')->getBooking($booking_id);
-
-            
-            $site = $this->model('Site')->getSiteById($thisBooking->site_id);
-            $site_user_id = $site->manager_id;
-            $now = new DateTime();
-            $sender_id = $site_user_id;
-            $receiver_id = $this->model('Customer')->getCustomerByCustomerId($thisBooking->customer_id)->user_id;
-            $Message = "Your booking has been confirmed with " . $site->site_name . " on " . $thisBooking->booking_date . " At " . $thisBooking->start_time . ". Please come on time. Thank you";
-            //Send message to notify customer of the confirmation
-
-            $message = $this->model('Messages');
-            $message->time_sent = $now->format('Y-m-d H:i:s');
-            $message->sender_id = $sender_id;
-            $message->receiver_id = $receiver_id;
-            $message->message = $Message;
-
-            $message->insert();
-
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-
-        }
-
-        /**
-        @accessFilter:{EmployeeFilter}
-        */
-        public function declineBooking($booking_id){
-            $status = "declined";
-            $booking = $this->model('Bookings');
-            $booking->booking_id = $booking_id;
-            $booking->status = $status;
-            $booking->update();
-
-            $thisBooking = $this->model('Bookings')->getBooking($booking_id);
-
-            
-            $site = $this->model('Site')->getSiteById($thisBooking->site_id);
-            $site_user_id = $site->manager_id;
-            $now = new DateTime();
-            $sender_id = $site_user_id;
-            $receiver_id = $this->model('Customer')->getCustomerByCustomerId($thisBooking->customer_id)->user_id;
-            $Message = "Your booking with " . $site->site_name . " on " . $thisBooking->booking_date . " At " . $thisBooking->start_time . ". has been declined. We are sorry for the inconvenience";
-            //Send message to notify customer of the confirmation
-
-            $message = $this->model('Messages');
-            $message->time_sent = $now->format('Y-m-d H:i:s');
-            $message->sender_id = $sender_id;
-            $message->receiver_id = $receiver_id;
-            $message->message = $Message;
-
-            $message->insert();
-
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
             
         }
 
 	}
+?>
