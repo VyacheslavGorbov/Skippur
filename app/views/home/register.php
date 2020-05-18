@@ -59,7 +59,7 @@
 </head>
 
 <body>
-	<?php if (strlen($data['errorMessage'])  > 1){
+	<?php if (!empty($data['errorMessage'])){
 			$message = $data['errorMessage'];
 		 	echo  "<center><div class='alert alert-danger' role='alert'> $message </div><center>"; 
 		 }
