@@ -37,6 +37,7 @@ class Site extends Model
         $stmt = self::$_connection->prepare($sql);
         $stmt->execute(['manager_id'=>$manager_id]);
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
+        echo var_dump($stmt->fetch());
         return $stmt->fetch();
     }
 
@@ -55,8 +56,6 @@ class Site extends Model
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
         return $stmt->fetch();
     }
-
-
 
     function insert(){
     	$sql = 'INSERT INTO Sites(business_name, site_name, site_address, site_postal_code, site_phone_number, site_email, business_domain, manager_id, site_latitude, site_longitude) VALUES(:business_name, :site_name, :site_address, :site_postal_code, :site_phone_number, :site_email, :business_domain, :manager_id, :site_latitude, :site_longitude)';

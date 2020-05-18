@@ -34,8 +34,9 @@
         </a>
         <a href="/employee/add_employee">ADD NEW EMPLOYEE</a>
         <a href="/site/calender">HOME</a>
-        <a href="/site/scheduleToday">SCHEDULE</a>
-        <a href='/home/logout' class="topcorner">Logout</a>
+		<a href="/site/scheduleToday">SCHEDULE</a>
+		<a href="/site/messages">MESSAGES</a>
+        <a href='/home/logout' class="topcorner">LOGOUT</a>
     </nav>
 		<div>
 			<div class="container">

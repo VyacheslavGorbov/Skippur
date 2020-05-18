@@ -53,6 +53,44 @@
             return $result;
         }
 
+       /**
+        @accessFilter:{LoginFilter}
+        */
+        public function messages()
+        {
+            $messages = $this->model('Messages')->getSitesMessages($_SESSION["user_id"]);
+            $customers = [];
+    
+            foreach ($messages as $message) {
+                $user_id = $this->model('User')->getUserById($message->sender_id)->user_id;
+                $customer = $this->model('Customer')->getCustomerByUserId($user_id);
+                array_push($customers, $customer);
+            }
+    
+            $this->view('site/messages', $customers);
+        }
+         /**
+        @accessFilter:{LoginFilter}
+        */
+        public function sendMessage($customer_id)
+        {
+            $customer = $this->model('Customer')->getCustomerByCustomerId($customer_id);
+            $site = $this->model('Site')->getSite($_POST["user_id"]);
+            $messages = $this->model('Messages')->getUserMessagesWithSite($customer->user_id, $site->manager_id);
+    
+            if (isset($_POST["message-submit"])) {
+                $now = new DateTime();
+                $newMessage = $this->model('Messages');
+                $newMessage->sender_id = $customer->user_id;
+                $newMessage->receiver_id = $site->manager_id;
+                $newMessage->message = $_POST["message"];
+                $newMessage->time_sent =  $now->format('Y-m-d H:i:s');
+                $newMessage->insert();
+                header('location:/site/sendMessage/'.$customer->customer_id);
+            }
+    
+            $this->view('site/sendMessage', ["customer" => $customer, "site" => $site, "messages"=>$messages]);
+        }
         
 
         /**

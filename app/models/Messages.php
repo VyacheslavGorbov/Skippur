@@ -42,6 +42,17 @@ class Messages extends Model
         $stmt->setFetchMode(PDO::FETCH_CLASS, 'messages');
         return $stmt->fetchAll();
     }
+
+    public function getSitesMessages($manager_id)
+    {
+        $SQL = 'SELECT DISTINCT sender_id FROM messages WHERE receiver_id = :receiver_id';
+        $stmt = self::$_connection->prepare($SQL);
+        $stmt->execute(['receiver_id'=>$manager_id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'messages');
+        return $stmt->fetchAll();
+    }
+
+    
 }
 
 ?>
