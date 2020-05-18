@@ -28,7 +28,9 @@ class CustomerController extends Controller{
 			 }else{
                 $this->view('customer/register');
             }
-		}
+        }
+        
+
 		
         /**
         @accessFilter:{LoginFilter}
