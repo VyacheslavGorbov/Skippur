@@ -28,7 +28,7 @@
         </a>
         <a href="/customer/profile">Profile</a>
         <a href="/customer/messages">Messages</a>
-        <a href="/customer/myAppointments">My Appointments</a>
+        <a href="/customer/index">Home</a>
         <a href='/home/logout'>Logout</a>
     </nav>
 		<center><p><h1 margin-bottom="30px"> Success!! </h1><p><center>

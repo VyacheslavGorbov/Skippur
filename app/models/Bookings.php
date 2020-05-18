@@ -48,6 +48,14 @@
 	        return $stmt->fetchAll();
     	}
 
+    	public function getBooking($booking_id){
+    		$sql = 'SELECT * FROM Bookings WHERE booking_id = :booking_id';
+	        $stmt = self::$_connection->prepare($sql);
+	        $stmt->execute(['booking_id'=>$booking_id]);
+	        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Bookings');
+	        return $stmt->fetch();
+    	}
+
     	public function getEmployeesUnconfirmedBookings($employee_id, $status){
     		$sql = 'SELECT * FROM Bookings WHERE employee_id = :employee_id AND status = :status';
 	        $stmt = self::$_connection->prepare($sql);

@@ -48,14 +48,15 @@
         if (!empty($data["messages"]))
             foreach ($data["messages"] as $message) {
                 $sendertype = $this->model('User')->getUserById($message->sender_id)->user_type;
-                
-                if ($sendertype == 'Customer'){
+
+
+                if ($sendertype == 'Customer') {
                     $sender_name = $this->model('Customer')->getCustomerByUserId($message->sender_id)->customer_name;
-                }
-                else{
+                } else {
                     $sender_name = $this->model('Site')->getSite($message->sender_id)->site_name;
                 }
-                
+
+
                 echo "<li class='list-group-item'><strong>" . $sender_name . ":</strong> ";
                 echo $message->message;
                 echo "<p style='color: #B8B8B8;text-align: right;'>" . $message->time_sent . "</p></li>";
@@ -63,7 +64,7 @@
         ?>
     </ul>
 
-    <form method="post" action="/site/sendMessage/<?php echo $data['customer']->customer_id?>" class="text-center">
+    <form method="post" action="/site/sendMessage/<?php echo $data['customer']->customer_id ?>" class="text-center">
         <br>
         <textarea id="myInput" name="message" cols="30" rows="5" class="html-text-box" placeholder="Message here ..."></textarea><br>
         <input type="hidden" value=<?php echo $data['customer']->customer_id ?> name="customer_id">
@@ -71,7 +72,7 @@
         <input id="myBtn" type="submit" value="Submit" name="message-submit" class="html-text-box">
         <input type="reset" value="Reset" class="html-text-box">
     </form>
-    
+
     <script>
         var input = document.getElementById("myInput");
         input.addEventListener("keyup", function(event) {
