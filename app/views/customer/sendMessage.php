@@ -26,14 +26,19 @@
     <h2 class="text-center"><?php echo $data['site']->site_name ?> Messages</h2>
     <<a style="margin: 0 auto;" href="/customer/viewSite/<?php echo $data['site']->site_id?>">Back to site</a>
     <ul class="list-group" id="messages" style="width: 750px; height: 300px; overflow: auto; margin: 0 auto;">
-        <?php
+    <?php
         if (!empty($data["messages"]))
             foreach ($data["messages"] as $message) {
-                if ($message->sender_id == $data['customer']->user_id)
-                    $sender = $data['customer']->customer_name;
-                else
-                    $sender = $data['site']->site_name;
-                echo "<li class='list-group-item'><strong>" . $sender . ":</strong> ";
+                $sendertype = $this->model('User')->getUserById($message->sender_id)->user_type;
+                
+                if ($sendertype == 'Customer'){
+                    $sender_name = $this->model('Customer')->getCustomerByUserId($message->sender_id)->customer_name;
+                }
+                else{
+                    $sender_name = $this->model('Site')->getSite($message->sender_id)->site_name;
+                }
+                
+                echo "<li class='list-group-item'><strong>" . $sender_name . ":</strong> ";
                 echo $message->message;
                 echo "<p style='color: #B8B8B8;text-align: right;'>" . $message->time_sent . "</p></li>";
             }
@@ -48,7 +53,7 @@
         <input id="myBtn" type="submit" value="Submit" name="message-submit" class="html-text-box">
         <input type="reset" value="Reset" class="html-text-box">
     </form>
-    
+
     <script>
         var input = document.getElementById("myInput");
         input.addEventListener("keyup", function(event) {

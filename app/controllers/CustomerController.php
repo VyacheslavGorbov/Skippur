@@ -86,12 +86,11 @@ class CustomerController extends Controller{
         {
             $customer = $this->model('Customer')->getCustomerByUserId($_SESSION["user_id"]);
             $site = $this->model('Site')->getSiteById($site_id);
-            $messages = $this->model('Messages')->getUserMessagesWithSite($customer->user_id, $site->manager_id);
-    
+            $messages = $this->model('Messages')->getMessages($customer->user_id, $site->manager_id);
             if (isset($_POST["message-submit"])) {
                 $now = new DateTime();
                 $newMessage = $this->model('Messages');
-                $newMessage->sender_id = $customer->user_id;
+                $newMessage->sender_id = $_SESSION["user_id"];
                 $newMessage->receiver_id = $site->manager_id;
                 $newMessage->message = $_POST["message"];
                 $newMessage->time_sent =  $now->format('Y-m-d H:i:s');

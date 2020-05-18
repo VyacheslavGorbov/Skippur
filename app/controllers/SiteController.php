@@ -75,14 +75,14 @@
         public function sendMessage($customer_id)
         {
             $customer = $this->model('Customer')->getCustomerByCustomerId($customer_id);
-            $site = $this->model('Site')->getSite($_POST["user_id"]);
-            $messages = $this->model('Messages')->getUserMessagesWithSite($customer->user_id, $site->manager_id);
-    
+            $site = $this->model('Site')->getSite($_SESSION["user_id"]);
+            $messages = $this->model('Messages')->getMessages($customer->user_id, $site->manager_id);
+            echo var_dump($messages);
             if (isset($_POST["message-submit"])) {
                 $now = new DateTime();
                 $newMessage = $this->model('Messages');
-                $newMessage->sender_id = $customer->user_id;
-                $newMessage->receiver_id = $site->manager_id;
+                $newMessage->sender_id = $_SESSION['user_id'];
+                $newMessage->receiver_id = $customer->user_id;
                 $newMessage->message = $_POST["message"];
                 $newMessage->time_sent =  $now->format('Y-m-d H:i:s');
                 $newMessage->insert();

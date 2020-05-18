@@ -47,18 +47,25 @@
         <?php
         if (!empty($data["messages"]))
             foreach ($data["messages"] as $message) {
-                if ($message->sender_id == $data['customer']->user_id)
-                    $sender = $data['customer']->customer_name;
-                else
-                    $sender = $data['site']->site_name;
-                echo "<li class='list-group-item'><strong>" . $sender . ":</strong> ";
+                $sendertype = $this->model('User')->getUserById($message->sender_id)->user_type;
+                echo var_dump($sendertype);
+                
+                if ($sendertype == 'Customer'){
+                    $sender_name = $this->model('Customer')->getCustomerByUserId($message->sender_id)->customer_name;
+                }
+                else{
+                    $sender_name = $this->model('Site')->getSite($message->sender_id)->site_name;
+                }
+                
+                echo var_dump($sender_name);
+                echo "<li class='list-group-item'><strong>" . $sender_name . ":</strong> ";
                 echo $message->message;
                 echo "<p style='color: #B8B8B8;text-align: right;'>" . $message->time_sent . "</p></li>";
             }
         ?>
     </ul>
 
-    <form method="post" action="/customer/sendMessage/<?php echo $data['site']->site_id ?>" class="text-center">
+    <form method="post" action="/site/sendMessage/<?php echo $data['customer']->customer_id?>" class="text-center">
         <br>
         <textarea id="myInput" name="message" cols="30" rows="5" class="html-text-box" placeholder="Message here ..."></textarea><br>
         <input type="hidden" value=<?php echo $data['customer']->customer_id ?> name="customer_id">

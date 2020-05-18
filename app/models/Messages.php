@@ -52,7 +52,17 @@ class Messages extends Model
         return $stmt->fetchAll();
     }
 
+    public function getMessages($customer_id, $manager_id)
+    {
+        $SQL = 'SELECT * FROM messages WHERE sender_id = :sender_id AND receiver_id = :receiver_id UNION ALL SELECT * FROM messages WHERE sender_id = :receiver_id AND receiver_id = :sender_id ORDER BY time_sent';
+        $stmt = self::$_connection->prepare($SQL);
+        $stmt->execute(['sender_id'=>$customer_id, 'receiver_id'=>$manager_id]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'messages');
+        return $stmt->fetchAll();
+    }
     
+
+
 }
 
 ?>
