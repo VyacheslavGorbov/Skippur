@@ -66,7 +66,7 @@
         /* Modal Content */
         .modal-content {
             background-color: #fefefe;
-            margin: auto;
+            margin: 0 auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
@@ -116,9 +116,9 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
-            <form method="post" action="/action_page_post.php">
-                <label for="cars">Service Industry: </label>
-                <select id="cars" multiple="multiple">
+            <form method="post" action="/customer/search">
+                <center><label for="cars">Service Industry: </label>
+                <select id="cars" name="something">
                     <?php
                     $industries = $this->model('service_industries')->getIndustryCategories();
                     foreach ($industries as $industry) {
@@ -126,7 +126,7 @@
                     }
                     ?>
                 </select>
-                <label>Service Cost Range: </label>
+                <button name="submit" class="btn btn-primary" action="submit">Submit</button></center>
             </form>
         </div>
     </div>
@@ -156,7 +156,6 @@
             return result;
         }
 
-
         function search() {
             // get search box value
             var userAddress = document.getElementById("searchBox").value.replace(/\s+/g, '+');
@@ -182,9 +181,10 @@
                 var marker = L.marker([site[1].site_latitude, site[1].site_longitude]);
                 marker.bindPopup(
                     "<b>" + site[1].business_name + "</b>" +
-                    "<br>" + site[1].site_address +
-                    "<br>" + site[1].site_postal_code +
-                    "<br>" + site[1].site_phone_number +
+                    "<br><b>Business: </b>" + site[1].business_domain +
+                    "<br><b>Address: </b>" + site[1].site_address +
+                    "<br><b>Postal Code: </b>" + site[1].site_postal_code +
+                    "<br><b>Phone: </b>" + site[1].site_phone_number +
                     "<br>" + '<a href="/customer/calender/' + site[1].site_id + '">Visit Page</a>');
                 markers.addLayer(marker);
             });

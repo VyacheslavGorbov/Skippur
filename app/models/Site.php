@@ -56,6 +56,14 @@ class Site extends Model
         return $stmt->fetch();
     }
 
+    public function getSitesByBusinessDomain($business_domain) {
+        $sql = 'SELECT * FROM Sites WHERE business_domain = :business_domain';
+        $stmt = self::$_connection->prepare($sql);
+        $stmt->execute(['business_domain'=>$business_domain]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, 'Site');
+        return $stmt->fetchAll();
+    }
+
 
 
     function insert(){

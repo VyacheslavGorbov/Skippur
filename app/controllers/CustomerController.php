@@ -10,7 +10,14 @@ class CustomerController extends Controller{
 			$customers = $customer->All();
 			$sites = $this->model('Site')->All();
 			$this->view('customer/index', ['customer' => $customer, 'sites' => $sites]);
-		}
+        }
+        
+        public function search()
+        {
+            $business_domains = $_POST["something"];
+            $sites = $this->model('Site')->getSitesByBusinessDomain($business_domains);
+            $this->view('customer/search', ['sites' => $sites]);
+        }
 
 		public function register()
         {

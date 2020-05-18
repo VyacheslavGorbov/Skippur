@@ -23,35 +23,20 @@
                 $site->site_email = $site_email;
                 $site->business_domain = $business_domain;
                 $site->manager_id = $user_id;
-                echo $business_domain;
+                $site->site_latitude = $_POST['latitude'];
+                $site->site_longitude = $_POST['longitude'];
+                $site->insert();
 
-                if ($site_address != null) {
-                    $latLon = $this->getLatLon($site_address);
-
-                    $site->site_latitude = $latLon[0];
-                    $site->site_longitude = $latLon[1];
-                }
-
-            	$site->insert();
-
-
-			 }else{
-
+                header('location:/site/calender/');
+			 }
+             else {
                 $industry_categories = $this->model('Service_Industries')->getIndustryCategories();
 
                 $this->view('Site/Register', ['industry_categories' => $industry_categories]);
-            }
+             }
+        
         }
 
-        public function getLatLon($address) {
-            $result = array();
-            $opts = array('http'=>array('header'=>"User-Agent: Skippur 0.2.2\r\n"));
-            $context = stream_context_create($opts);
-
-            $decodedJsonStr = json_decode(file_get_contents('https://nominatim.openstreetmap.org/search?q=' . preg_replace('/\s+/', '+', $address) . '&format=json', false, $context), true);
-            array_push($result, $decodedJsonStr[0]['lat'], $decodedJsonStr[0]['lon']);
-            return $result;
-        }
 
        /**
         @accessFilter:{LoginFilter}
